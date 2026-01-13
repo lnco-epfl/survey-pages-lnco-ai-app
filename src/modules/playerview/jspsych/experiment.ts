@@ -115,7 +115,9 @@ const buildTimelineFromSurvey = (
 
   timeline.push({
     type: jsPsychSurvey,
-    survey_function: (survey: SurveyModel) => {
+    survey_function: (survey: {
+      onCurrentPageChanged: { add: (arg0: () => void) => void };
+    }) => {
       survey.onCurrentPageChanged.add(() => {
         onFinish(jsPsych.data.get(), settings);
       });

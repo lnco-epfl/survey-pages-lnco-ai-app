@@ -37,7 +37,6 @@ const downloadJson: (json: string, filename: string) => void = (
 
 const ResultsView: FC = () => {
   const { allSurveyResultsAppData } = useSurveyResults();
-  console.log(useSurveyResults());
 
   const allData = (): string => {
     const completeJSON: string[] = [];
