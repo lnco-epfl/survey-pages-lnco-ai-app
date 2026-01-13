@@ -1,0 +1,69 @@
+{
+  "translations": {
+    "Welcome to the Graasp App Starter Kit": "Welcome to the Graasp App Starter Kit",
+    "ERROR_BOUNDARY": {
+      "FALLBACK": {
+        "MESSAGE_TITLE": "Sorry, something went wrong with this application",
+        "MESSAGE_FEEDBACK": "Our team has been notified. If you would like to help, please, tell us what happened below.",
+        "ERROR_DETAILS": "Details of the error",
+        "NAME_LABEL": "Name",
+        "NAME_HELPER": "Provide your name (optional)",
+        "EMAIL_LABEL": "Email",
+        "EMAIL_HELPER": "Provide your email (optional)",
+        "COMMENT_LABEL": "Comment",
+        "COMMENT_HELPER": "Tell us what happened (optional)",
+        "THANKS_FOR_FEEDBACK": "Thank you for your feedback!",
+        "SEND": "Send your feedback"
+      }
+    },
+    "SETTINGS": {
+      "TITLE": "Settings",
+      "FULL_SCREEN": {
+        "TITLE": "General Settings",
+        "LABEL_FULL_SCREEN": "Display Full Screen",
+        "LABEL_PAGE_PER_QUESTION": "Display each question on a new page"
+      },
+      "NEXT_STEP": {
+        "TITLE_LABEL": "Title",
+        "DESCRIPTION_LABEL": "Description",
+        "LINK_LABEL": "Link",
+        "LABEL_NEXT_STEP": "Do you want to link the next step?",
+        "LINK_PAGE_LABEL": "Link Page Content",
+        "LINK_TEXT_LABEL": "Link Text"
+      },
+      "SECTIONS": {
+        "MANDATORY_LABEL": "Mandatory",
+        "QUESTION_LABEL": "Question",
+        "ANSWER_LABEL": "Answer",
+        "ADD_QUESTION": "Add Question",
+        "ADD_ANSWER": "Add Answer",
+        "ADD_PAGE": "Add Page",
+        "ADD_MC_QUESTION": "Add Multiple Choice Question",
+        "ADD_SA_QUESTION": "Add Short Answer Question",
+        "ADD_LA_QUESTION": "Add Long Answer Question",
+        "ADD_MA_QUESTION": "Add Multiple Answer Question",
+        "ADD_LS_QUESTION": "Add Lickert Scale Question",
+        "ADD_TEXT_ELEMENT": "Add Text Element",
+        "ANSWER_TYPE_LABEL": "Answer Type",
+        "TEXT_TYPE_LABEL": "Text",
+        "NUMBER_TYPE_LABEL": "Number",
+        "DATE_TYPE_LABEL": "Date",
+        "ADD_SCALE_OPTION": "Add Scale Option",
+        "SCALE_OPTION_LABEL": "Scale Options",
+        "DESCRIPTION_LABEL": "Description",
+        "TITLE_LABEL": "Title",
+        "CONTINUE_BUTTON_TEXT_LABEL": "Continue Button Text",
+        "LABEL_longAnswer": "Long Answer",
+        "LABEL_text": "Text",
+        "LABEL_shortAnswer": "Short Answer",
+        "LABEL_multipleChoice": "Multiple Choice",
+        "LABEL_multiAnswer": "Multi Answer",
+        "LABEL_likertScale": "Lickert Scale",
+        "PAGE_BUTTON_SETTINGS_HEADER": "Button Text Settings",
+        "NEXT_PAGE_LABEL": "Next Page Button Text",
+        "PREVIOUS_PAGE_LABEL": "Previous Page Button Text",
+        "FINISH_SURVEY_LABEL": "Finish Survey Button Text"
+      }
+    }
+  }
+}

@@ -1,0 +1,316 @@
+//@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+//@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+@media (display-mode: fullscreen) {
+  .player-view {
+    height: 100vh;
+    background-color: rgb(49, 49, 49);
+  }
+}
+
+h3 {
+  font-size: 1.5rem;
+  line-height: 1.8rem;
+}
+h2 {
+  font-size: 45px;
+}
+h1 {
+  font-size: 50px;
+}
+
+/* Jspsych div rendered in React */
+.jspsych-content-outer {
+  margin: 0 auto; /* this is for overflowing content */
+  font-size: 1.25rem;
+  width: 100%;
+  background-color: #fffefe;
+  color: #313131;
+}
+
+/* div rendered by jsPsych */
+.jspsych-display-element {
+  display: flex;
+  margin: auto;
+  flex: 1 1 100%;
+  background-color: #fffefe;
+  color: #313131;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  overflow-y: auto;
+  font-family: 'Nunito', 'Roboto', 'sans-serif' !important;
+  font-size: 1.5rem;
+  line-height: 1.6em;
+}
+
+.jspsych-display-element:focus {
+  outline: none;
+}
+
+/* Wrapper for outer jsPsych content */
+.jspsych-content-wrapper,
+.jspsych-content-outer-wrapper {
+  height: 100%;
+}
+
+/* inner JsPsych content (no progress bar) */
+.jspsych-content {
+  margin: 0 auto; /* this is for overflowing content */
+  width: 75%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Progress bar Div */
+.jspsych-top {
+  align-items: flex-start;
+}
+
+/* Progress bar content */
+#jspsych-progressbar-container {
+  color: rgb(250, 250, 255);
+  background-color: rgb(20, 20, 20);
+  margin-bottom: 1em;
+  text-align: center;
+  padding: 8px 0px;
+  width: 100%;
+  line-height: 1em;
+  position: relative;
+}
+
+#jspsych-progressbar-container span {
+  font-size: 14px;
+  padding-right: 14px;
+}
+
+#jspsych-progressbar-outer {
+  background-color: rgb(180, 180, 180);
+  width: 50%;
+  margin: auto;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#jspsych-progressbar-inner {
+  background-color: rgba(100, 100, 100);
+  width: 0%;
+  height: 100%;
+}
+
+/* Main Content Div */
+.jspsych-middle {
+  align-items: center;
+}
+
+/* Custom button styling */
+.jspsych-btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 0px;
+  font-weight: 400;
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: rgb(180, 180, 180);
+  color: rgb(255, 255, 255);
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+  margin: 0 auto;
+}
+
+.jspsych-btn:hover {
+  background-color: rgb(100, 100, 100);
+}
+
+.jspsych-btn:disabled {
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+/** Form Styles **/
+.sd-root-modern {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.jspsych-body {
+  width: 100%;
+}
+
+.jspsych-page {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+/** Titles, text and questions **/
+.sd-html td,
+.sd-html span,
+.sd-html div,
+.sd-html p {
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-size: 1.5rem;
+  line-height: 1.6em;
+  color: #313131;
+}
+.sd-html h5 {
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-size: 1.7rem;
+  line-height: 1.8rem;
+  color: #313131;
+}
+
+/* Outer box around every question */
+.sd-element--with-frame.sd-question--title-top {
+  padding: 4px;
+  margin-bottom: 20px;
+}
+
+/* Button alignment */
+.sd-action-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sv-components-container-contentBottom {
+  margin: 20px 0px;
+}
+
+/* Survey button styling (same as JsPsych button) */
+.sd-btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 5px;
+  font-weight: 400;
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.6rem;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: rgb(180, 180, 180);
+  color: rgb(255, 255, 255);
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+}
+
+.sd-btn:hover {
+  background-color: rgb(100, 100, 100);
+}
+
+.sd-btn:disabled {
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Title */
+.sd-title .sv-title-actions {
+  width: 100%;
+}
+
+.sd-title.sd-element__title,
+.sd-element__title span {
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-size: 1.5rem;
+  line-height: 1.6rem;
+  color: #313131;
+  margin: 0px;
+  margin-bottom: 10px;
+}
+
+.sd-item__control-label {
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-size: 1.5rem;
+  line-height: 1.6rem;
+  color: #313131;
+}
+
+.sd-element--with-frame {
+  padding: 0px;
+  box-shadow: none;
+  overflow: auto;
+}
+
+.jspsych-display-element input[type='text'] {
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-size: 1.5rem;
+  line-height: 1.6rem;
+  color: #313131;
+}
+
+.sd-action,
+.sv-dots__item {
+  display: none;
+}
+
+/* Input Text */
+.jspsych-display-element input[type='text'],
+.jspsych-display-element input[type='number'],
+.jspsych-display-element input[type='date'],
+.sd-input[type='date'] {
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-size: 1.5rem;
+  line-height: 1.6rem;
+  color: #313131;
+  width: 40vw;
+  min-width: 200px;
+  border: none;
+  border-bottom: 2px solid #000;
+  padding: 8px 4px;
+}
+
+/* Multiple Choice */
+.sd-selectbase {
+  border: none;
+  padding: 0px;
+}
+
+.link-to-experiment {
+  font-size: 2rem;
+  line-height: 2.2rem;
+  color: #313131;
+  font-weight: bold;
+  text-align: center;
+  display: block; /* Make it a block-level element */
+}
+
+.link-to-experiment:hover {
+  color: #ff0000;
+}
+
+/* Error boxes for questions */
+.sd-element__erbox {
+  color: #e63946; /* Red text for error message */
+  font-size: 0.875rem; /* Smaller font size for the error message */
+  margin-top: 4px;
+  font-weight: bold;
+}
