@@ -4,8 +4,8 @@ import { useLocalContext } from '@graasp/apps-query-client';
 import { Context } from '@graasp/sdk';
 
 import i18n, { DEFAULT_LANGUAGE } from '../../config/i18n';
+import { ExperimentResultsProvider } from '../context/ExperimentContext';
 import { SettingsProvider } from '../context/SettingsContext';
-import { SurveyResultsProvider } from '../context/SurveyContext';
 import AnalyticsView from './AnalyticsView';
 import BuilderView from './BuilderView';
 import PlayerView from './PlayerView';
@@ -37,7 +37,7 @@ const App = (): JSX.Element => {
 
   return (
     <SettingsProvider>
-      <SurveyResultsProvider>{renderContent()}</SurveyResultsProvider>
+      <ExperimentResultsProvider>{renderContent()}</ExperimentResultsProvider>
     </SettingsProvider>
   );
 };

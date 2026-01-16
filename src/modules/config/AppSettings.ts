@@ -17,6 +17,7 @@ export enum QuestionTypes {
   MultipleChoice = 'multipleChoice',
   MultiAnswer = 'multiAnswer',
   LikertScale = 'likertScale',
+  LikertBlock = 'likertBlock',
 }
 
 export enum OtherElementType {
@@ -49,6 +50,8 @@ export type MultipleChoice = {
   description: string;
   mandatory: boolean;
   answers: string[];
+  hasOtherOption?: boolean;
+  otherOptionText?: string;
 };
 
 export type MultiAnswer = {
@@ -69,12 +72,23 @@ export type LikertScale = {
   scale: string[];
 };
 
+export type LikertBlock = {
+  type: QuestionTypes.LikertBlock;
+  name: string;
+  description: string;
+  mandatory: boolean;
+  requireAll?: boolean; // Require all questions to be answered
+  questions: string[]; // rows
+  scale: string[];
+};
+
 export type Question =
   | ShortAnswer
   | LongAnswer
   | MultipleChoice
   | MultiAnswer
-  | LikertScale;
+  | LikertScale
+  | LikertBlock;
 
 export type TextElement = {
   type: OtherElementType.Text;

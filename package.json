@@ -52,7 +52,7 @@
     "preview:test": "yarn vite preview --mode test",
     "postinstall": "husky install",
     "lint": "eslint .",
-    "prettier:write": "prettier {src,cypress}/**/*.{ts,tsx,js,jsx} --write",
+    "prettier:write": "prettier --write .",
     "prettier:check": "prettier {src,cypress}/**/*.{ts,tsx,js,jsx} --check",
     "type-check": "tsc --noEmit",
     "check": "yarn lint && yarn prettier:check && yarn type-check",

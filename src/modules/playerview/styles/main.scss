@@ -33,8 +33,8 @@ h1 {
   display: flex;
   margin: auto;
   flex: 1 1 100%;
-  background-color: #fffefe;
-  color: #313131;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: #2c3e50;
   width: 100%;
   height: 100%;
   flex-direction: column;
@@ -70,35 +70,41 @@ h1 {
 
 /* Progress bar content */
 #jspsych-progressbar-container {
-  color: rgb(250, 250, 255);
-  background-color: rgb(20, 20, 20);
-  margin-bottom: 1em;
+  color: #ffffff;
+  background: linear-gradient(135deg, #666 0%, #444 100%);
+  margin-bottom: 1.5em;
   text-align: center;
-  padding: 8px 0px;
+  padding: 14px 0px;
   width: 100%;
   line-height: 1em;
   position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 #jspsych-progressbar-container span {
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 600;
   padding-right: 14px;
 }
 
 #jspsych-progressbar-outer {
-  background-color: rgb(180, 180, 180);
-  width: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  width: 60%;
   margin: auto;
-  height: 20px;
+  height: 24px;
   display: inline-block;
   vertical-align: middle;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 #jspsych-progressbar-inner {
-  background-color: rgba(100, 100, 100);
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
   width: 0%;
   height: 100%;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
 }
 
 /* Main Content Div */
@@ -181,8 +187,21 @@ h1 {
 
 /* Outer box around every question */
 .sd-element--with-frame.sd-question--title-top {
-  padding: 4px;
-  margin-bottom: 20px;
+  padding: 24px;
+  margin-bottom: 28px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.sd-element--with-frame.sd-question--title-top:hover {
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 /* Button alignment */
@@ -196,40 +215,56 @@ h1 {
   margin: 20px 0px;
 }
 
+.sv-hidden {
+  display: none;
+}
+
 /* Survey button styling (same as JsPsych button) */
 .sd-btn {
   display: inline-block;
-  padding: 6px 12px;
-  margin: 5px;
-  font-weight: 400;
-  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  padding: 12px 28px;
+  margin: 8px;
   font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 1.6rem;
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-size: 1.125rem;
+  line-height: 1.5;
   cursor: pointer;
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
   background-image: none;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: rgb(180, 180, 180);
-  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #666 0%, #444 100%);
+  color: #ffffff;
   box-shadow:
-    rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
-    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
-    rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  min-width: 120px;
 }
 
 .sd-btn:hover {
-  background-color: rgb(100, 100, 100);
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.12);
+  background: linear-gradient(135deg, #444 0%, #444 100%);
+}
+
+.sd-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 .sd-btn:disabled {
-  background-color: #eee;
-  color: #aaa;
-  border-color: #ccc;
+  background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%);
+  color: #9e9e9e;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Title */
@@ -242,9 +277,18 @@ h1 {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
   font-size: 1.5rem;
   line-height: 1.6rem;
-  color: #313131;
+  color: #2c3e50;
+  font-weight: 600;
   margin: 0px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+/* Required asterisk styling */
+.sd-element__title .sd-element__required-text {
+  color: #e74c3c;
+  font-weight: 700;
+  margin-left: 4px;
+  font-size: 1.2em;
 }
 
 .sd-item__control-label {
@@ -278,20 +322,114 @@ h1 {
 .jspsych-display-element input[type='date'],
 .sd-input[type='date'] {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.5rem;
-  line-height: 1.6rem;
-  color: #313131;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: #2c3e50;
   width: 40vw;
-  min-width: 200px;
+  min-width: 250px;
   border: none;
-  border-bottom: 2px solid #000;
-  padding: 8px 4px;
+  border-bottom: 2px solid #cbd5e0;
+  padding: 10px 6px;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.jspsych-display-element input[type='text']:focus,
+.jspsych-display-element input[type='number']:focus,
+.jspsych-display-element input[type='date']:focus,
+.sd-input[type='date']:focus {
+  outline: none;
+  border-bottom-color: #444;
+  background-color: rgba(102, 126, 234, 0.03);
+}
+
+.jspsych-display-element input[type='text']::placeholder,
+.jspsych-display-element input[type='number']::placeholder,
+.jspsych-display-element input[type='date']::placeholder {
+  color: #a0aec0;
+}
+
+/* Textarea styling for Long Answer and Other fields */
+.sd-comment,
+textarea.sd-input.sd-comment {
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #2c3e50;
+  width: 50vw;
+  min-width: 320px;
+  min-height: 120px;
+  padding: 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  resize: vertical;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.sd-comment:focus,
+textarea.sd-input.sd-comment:focus {
+  outline: none !important;
+  border-color: #444 !important;
+  box-shadow: 0 0 0 3px rgba(68, 68, 68, 0.1) !important;
+  background-color: #ffffff !important;
+}
+
+.sd-comment::placeholder,
+textarea.sd-input.sd-comment::placeholder {
+  color: #a0aec0;
+}
+
+/* Specific styling for "Other" option textarea */
+.sd-selectbase__other {
+  margin-top: 10px !important;
+  min-height: 80px !important;
+  width: 35vw !important;
+  min-width: 250px !important;
 }
 
 /* Multiple Choice */
 .sd-selectbase {
   border: none;
   padding: 0px;
+}
+
+.sd-item {
+  padding: 10px 12px;
+  margin: 6px 0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+  border: 2px solid transparent;
+}
+
+.sd-item:hover {
+  background-color: #e9ecef;
+}
+
+.sd-item--checked {
+  background-color: #e9ecef !important;
+  box-shadow: 0 0 0 2px rgba(68, 68, 68, 0.1);
+}
+
+.sd-item__control-label {
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #2c3e50;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Radio buttons and checkboxes - larger for accessibility */
+input[type='radio'],
+input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  cursor: pointer;
+  accent-color: #444;
 }
 
 .link-to-experiment {
@@ -309,8 +447,154 @@ h1 {
 
 /* Error boxes for questions */
 .sd-element__erbox {
-  color: #e63946; /* Red text for error message */
-  font-size: 0.875rem; /* Smaller font size for the error message */
-  margin-top: 4px;
-  font-weight: bold;
+  color: #ffffff;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  font-size: 1rem;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sd-element__erbox::before {
+  content: '⚠';
+  font-size: 1.2em;
+  flex-shrink: 0;
+}
+
+/* Highlight questions with errors */
+.sd-question--error .sd-element--with-frame {
+  border: 2px solid #e74c3c !important;
+  box-shadow:
+    0 0 0 3px rgba(231, 76, 60, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Error state for inputs */
+.sd-question--error input[type='text'],
+.sd-question--error input[type='number'],
+.sd-question--error input[type='date'],
+.sd-question--error textarea.sd-comment {
+  border-color: #e74c3c !important;
+}
+
+.sd-question--error input[type='text']:focus,
+.sd-question--error input[type='number']:focus,
+.sd-question--error input[type='date']:focus,
+.sd-question--error textarea.sd-comment:focus {
+  border-color: #e74c3c !important;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
+}
+
+/* Likert block styling */
+/* --- Matrix (Likert table) spacing --- */
+.sd-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.sd-table__row {
+  height: auto;
+  transition: background-color 0.2s ease;
+}
+
+.sd-table__cell {
+  padding: 14px 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.sd-table__row-text {
+  padding: 14px 16px;
+  line-height: 1.5;
+  max-width: 480px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.sd-table__cell--choice {
+  text-align: center;
+  min-width: 70px;
+}
+
+.sd-table__cell--header {
+  padding: 12px 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: normal;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.sd-table__row-text {
+  width: 45%;
+}
+
+.sd-table__cell {
+  width: auto;
+  text-align: center;
+  font-size: 18px;
+}
+
+.sd-table__cell--row-text {
+  text-align: left;
+}
+
+.sd-item__control {
+  transform: scale(1.25);
+  cursor: pointer;
+}
+.sd-question {
+  margin-bottom: 2rem;
+}
+
+.sd-question__title {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/* Question descriptions */
+.sd-question__description,
+.sd-element__description {
+  font-size: 1rem;
+  color: #718096;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Hide SurveyJS SVG checkbox */
+.sd-checkbox__decorator {
+  display: none;
+}
+
+/* Show native checkbox */
+.sd-item__control {
+  position: static !important;
+  opacity: 1 !important;
+  width: auto !important;
+  height: auto !important;
+  transform: none !important;
 }

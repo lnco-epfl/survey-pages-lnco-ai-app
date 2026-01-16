@@ -24,7 +24,14 @@ const MultipleChoiceSettingsView: FC<MultipleChoiceSettingsViewProps> = ({
   const { t } = useTranslation('translations', {
     keyPrefix: 'SETTINGS.SECTIONS',
   });
-  const { question, description, answers, mandatory } = questionObject;
+  const {
+    question,
+    description,
+    answers,
+    mandatory,
+    hasOtherOption,
+    otherOptionText,
+  } = questionObject;
 
   const answerFields = answers.map((answer, index) => (
     <TextField
@@ -81,6 +88,27 @@ const MultipleChoiceSettingsView: FC<MultipleChoiceSettingsViewProps> = ({
           {t('ADD_ANSWER')}
         </Button>
       </Box>
+      <FormControlLabel
+        control={<Switch />}
+        label="Include 'Other' Option"
+        onChange={(e, checked) =>
+          onChange({
+            ...questionObject,
+            hasOtherOption: checked,
+            otherOptionText: checked ? 'Other, please specify' : '',
+          })
+        }
+        checked={hasOtherOption ?? false}
+      />
+      {hasOtherOption && (
+        <TextField
+          value={otherOptionText || ''}
+          label="Other Option Text"
+          onChange={(e) =>
+            onChange({ ...questionObject, otherOptionText: e.target.value })
+          }
+        />
+      )}
     </Stack>
   );
 };

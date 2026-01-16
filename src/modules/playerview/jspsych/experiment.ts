@@ -34,10 +34,21 @@ const buildTimelineFromSurvey = (
   jsPsych: JsPsych,
   settings: AppSettings,
   result: ExperimentResult | undefined,
-  onFinish: (data: DataCollection, settings: AppSettings) => void,
+  updateData: (data: DataCollection, settings: AppSettings) => void,
 ): Timeline => {
   const timeline: Timeline = [];
   const pages: Pages[] = [];
+
+  // Extract previous responses if they exist
+  const previousResponses: Record<string, unknown> = {};
+
+  if (result?.rawData?.trials && result.rawData.trials.length > 0) {
+    const lastTrial = result.rawData.trials[result.rawData.trials.length - 1];
+    if (lastTrial.response) {
+      Object.assign(previousResponses, lastTrial.response);
+    }
+  }
+
   settings.sectionSettings.sections.forEach((section) => {
     // Initialize an array to hold all questions for this page
     const pageQuestions: Timeline = [];
@@ -52,15 +63,20 @@ const buildTimelineFromSurvey = (
             isRequired: element.mandatory,
             inputType: element.answerType,
             placeholder: 'Your Answer',
+            name: element.name,
+            defaultValue:
+              (previousResponses[element.name] as string) || undefined,
           });
           break;
 
         case QuestionTypes.LongAnswer:
           pageQuestions.push({
-            type: 'text',
+            type: 'comment',
             title: element.question,
-            rows: 5,
             isRequired: element.mandatory,
+            name: element.name,
+            defaultValue:
+              (previousResponses[element.name] as string) || undefined,
           });
           break;
 
@@ -71,6 +87,11 @@ const buildTimelineFromSurvey = (
             choices: element.answers,
             showClearButton: false,
             separateSpecialChoices: false,
+            hasOther: element.hasOtherOption ?? false,
+            otherText: element.otherOptionText || 'Other (please specify)',
+            name: element.name,
+            defaultValue:
+              (previousResponses[element.name] as string) || undefined,
           });
           break;
 
@@ -79,8 +100,12 @@ const buildTimelineFromSurvey = (
             type: 'checkbox',
             title: element.question,
             choices: element.answers,
+            isRequired: element.mandatory,
             randomize_question_order: true,
             allow_multiple: true,
+            name: element.name,
+            defaultValue:
+              (previousResponses[element.name] as string[]) || undefined,
           });
           break;
 
@@ -89,8 +114,29 @@ const buildTimelineFromSurvey = (
             type: 'radiogroup',
             title: element.question,
             choices: element.scale,
+            isRequired: element.mandatory,
             showClearButton: false,
             separateSpecialChoices: false,
+            name: element.name,
+            defaultValue:
+              (previousResponses[element.name] as string) || undefined,
+          });
+          break;
+        case QuestionTypes.LikertBlock:
+          pageQuestions.push({
+            type: 'matrix',
+            title: element.description,
+            columns: element.scale,
+            rows: element.questions.map((q) => ({
+              value: q,
+              text: q,
+            })),
+            isRequired: element.mandatory,
+            isAllRowRequired: element.requireAll ?? false,
+            name: element.name,
+            defaultValue:
+              (previousResponses[element.name] as Record<string, string>) ||
+              undefined,
           });
           break;
 
@@ -119,7 +165,7 @@ const buildTimelineFromSurvey = (
       onCurrentPageChanged: { add: (arg0: () => void) => void };
     }) => {
       survey.onCurrentPageChanged.add(() => {
-        onFinish(jsPsych.data.get(), settings);
+        updateData(jsPsych.data.get(), settings);
       });
     },
     survey_json: {
@@ -160,61 +206,61 @@ const getEndPage = (
   description: string,
   link: string,
   linkText: string,
-  onFinish: (data: DataCollection, settings: AppSettings) => void,
+  updateData: (data: DataCollection, settings: AppSettings) => void,
   input: AppSettings,
 ): Trial => ({
   type: htmlKeyboardResponse,
   choices: 'NO_KEYS',
   stimulus: `<div class='sd-html'><h5>${title}</h5><p>${description}</p><a class='link-to-experiment' target="_parent" href=${link}>${linkText}</a></div>`,
   on_start: (): void => {
-    onFinish(jspsych.data.get(), input);
+    updateData(jspsych.data.get(), input);
   },
 });
 
 export async function run({
   input,
-  onFinish,
+  updateData,
 }: {
-  input: { appSettings: AppSettings; experimentResult?: ExperimentResult };
-  onFinish: (data: DataCollection, settings: AppSettings) => void;
+  input: { settings: AppSettings; results?: ExperimentResult };
+  updateData: (data: DataCollection, settings: AppSettings) => void;
 }): Promise<JsPsych> {
   // Initialize jspsych
   const jsPsych: JsPsych = initJsPsych({
     show_progress_bar: true,
     auto_update_progress_bar: false,
-    display_element: 'jspsych-content',
+    display_element: 'jspsych-display-element',
     on_finish: (): void => {
-      onFinish(jsPsych.data.get(), input.appSettings);
+      updateData(jsPsych.data.get(), input.settings);
     },
   });
 
   const jsPsychTimeline: Timeline = [];
 
-  if (input.appSettings.fullScreenSettings.fullScreen) {
+  if (input.settings.fullScreenSettings.fullScreen) {
     jsPsychTimeline.push(getFullScreenTrial());
   }
 
   jsPsychTimeline.push(
     ...buildTimelineFromSurvey(
       jsPsych,
-      input.appSettings,
-      input.experimentResult,
+      input.settings,
+      input.results,
       (data: DataCollection, settings: AppSettings) => {
-        onFinish(data, settings);
+        updateData(data, settings);
       },
     ),
   );
 
-  if (input.appSettings.nextStepSettings.linkToNextPage) {
+  if (input.settings.nextStepSettings.linkToNextPage) {
     jsPsychTimeline.push(
       getEndPage(
         jsPsych,
-        input.appSettings.nextStepSettings.title,
-        input.appSettings.nextStepSettings.description,
-        input.appSettings.nextStepSettings.link,
-        input.appSettings.nextStepSettings.linkText,
-        onFinish,
-        input.appSettings,
+        input.settings.nextStepSettings.title,
+        input.settings.nextStepSettings.description,
+        input.settings.nextStepSettings.link,
+        input.settings.nextStepSettings.linkText,
+        updateData,
+        input.settings,
       ),
     );
   }

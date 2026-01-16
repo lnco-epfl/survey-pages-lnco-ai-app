@@ -14,6 +14,7 @@ import {
 import Stack from '@mui/material/Stack';
 
 import {
+  LikertBlock,
   LikertScale,
   LongAnswer,
   MultiAnswer,
@@ -30,6 +31,7 @@ import {
 
 import PageButtonSettingsView from './PageButtonSettingsView';
 import LikertScaleSettingsView from './questionviews/LickertScaleSettingsView';
+import LikertBlockSettingsView from './questionviews/LikertBlockSettingsView';
 import LongAnswerSettingsView from './questionviews/LongAnswerSettingsView';
 import MultiAnswerSettingsView from './questionviews/MultiAnswerSettingsView';
 import MultipleChoiceSettingsView from './questionviews/MultipleChoiceSettingsView';
@@ -107,6 +109,23 @@ const SectionSettingsView: FC<SectionSettingsViewProps> = ({
           question: '',
           mandatory: false,
           description: '',
+          scale: [
+            'Strongly Disagree',
+            'Disagree',
+            'Neutral',
+            'Agree',
+            'Strongly Agree',
+          ],
+        };
+        break;
+      case QuestionTypes.LikertBlock:
+        newItem = {
+          type: QuestionTypes.LikertBlock,
+          name: createQuestionId(),
+          description: '',
+          mandatory: false,
+          requireAll: true,
+          questions: [''],
           scale: [
             'Strongly Disagree',
             'Disagree',
@@ -461,6 +480,22 @@ const SectionSettingsView: FC<SectionSettingsViewProps> = ({
                     />
                   </Stack>
                 );
+              case QuestionTypes.LikertBlock:
+                return (
+                  <Stack spacing={1}>
+                    {elementHeaderArea(
+                      index,
+                      pageNr,
+                      QuestionTypes.LikertBlock,
+                    )}
+                    <LikertBlockSettingsView
+                      questionObject={element as LikertBlock}
+                      onChange={(newQuestion: LikertBlock) =>
+                        onChangeQuestion(index, pageNr, newQuestion)
+                      }
+                    />
+                  </Stack>
+                );
               case OtherElementType.Text:
                 return (
                   <Stack spacing={1}>
@@ -545,6 +580,16 @@ const SectionSettingsView: FC<SectionSettingsViewProps> = ({
                       }
                     >
                       {t('ADD_LS_QUESTION')}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() =>
+                        onChange(
+                          handleAddNewItem(QuestionTypes.LikertBlock, pageNr),
+                        )
+                      }
+                    >
+                      {t('ADD_LB_QUESTION')}
                     </Button>
                     <Button
                       variant="contained"

@@ -1,4 +1,5 @@
 # lnco-ai-survey-app
+
 Survey App for LNCO.ai platform made using JsPsych
 
 ## Installation
@@ -29,4 +30,5 @@ VITE_VERSION=latest
 # dont open browser
 BROWSER=none
 ```
->>>>>>> template/main
+
+> > > > > > > template/main

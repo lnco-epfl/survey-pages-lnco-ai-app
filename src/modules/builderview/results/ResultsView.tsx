@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import { format } from 'date-fns';
 import { DataCollection } from 'jspsych';
 
-import useSurveyResults from '@/modules/context/SurveyContext';
+import useExperimentResults from '@/modules/context/ExperimentContext';
 
 import ResultsRow from './ResultsRow';
 
@@ -36,11 +36,13 @@ const downloadJson: (json: string, filename: string) => void = (
 };
 
 const ResultsView: FC = () => {
-  const { allSurveyResultsAppData } = useSurveyResults();
+  const { allExperimentResultsAppData, deleteExperimentResult } =
+    useExperimentResults();
 
   const allData = (): string => {
     const completeJSON: string[] = [];
-    allSurveyResultsAppData?.forEach((data) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    allExperimentResultsAppData?.forEach((data) => {
       const experimentJSON = data.data.rawData
         ? new DataCollection(data.data.rawData.trials)
         : undefined;
@@ -79,10 +81,11 @@ const ResultsView: FC = () => {
               <TableCell>Number of Pages</TableCell>
               <TableCell>jsPsych Data Size</TableCell>
               <TableCell>Export</TableCell>
+              <TableCell>Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {allSurveyResultsAppData?.map((data) => {
+            {allExperimentResultsAppData?.map((data) => {
               const rawData = data.data.rawData
                 ? new DataCollection(data.data.rawData.trials)
                 : undefined;
@@ -100,6 +103,7 @@ const ResultsView: FC = () => {
                       `surveyapp_${data.creator?.name}_${data.updatedAt}_${format(new Date(), 'yyyyMMdd_HH.mm')}.json`,
                     )
                   }
+                  onDelete={() => deleteExperimentResult(data.id)}
                 />
               );
             })}

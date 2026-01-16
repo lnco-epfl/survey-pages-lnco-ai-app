@@ -35,6 +35,18 @@ const LongAnswerSettingsView: FC<LongAnswerSettingsViewProps> = ({
         onChange={(e) =>
           onChange({ ...questionObject, description: e.target.value })
         }
+        fullWidth
+      />
+      <TextField
+        multiline
+        rows={5}
+        label="Preview Long Answer Field"
+        placeholder="This is how the long answer field will look in the survey"
+        fullWidth
+        inputProps={{
+          style: { fontFamily: 'inherit', fontSize: 'inherit' },
+        }}
+        disabled
       />
       <FormControlLabel
         control={<Switch />}

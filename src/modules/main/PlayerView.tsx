@@ -1,10 +1,10 @@
 import { PLAYER_VIEW_CY } from '@/config/selectors';
 
-import SurveyLoader from '../playerview/SurveyLoader';
+import { ExperimentLoader } from '../playerview/ExperimentLoader';
 
 const PlayerView = (): JSX.Element => (
   <div className="player-view" data-cy={PLAYER_VIEW_CY}>
-    <SurveyLoader />
+    <ExperimentLoader />
   </div>
 );
 export default PlayerView;
