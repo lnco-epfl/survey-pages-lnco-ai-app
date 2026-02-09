@@ -62,6 +62,8 @@ export type MultiAnswer = {
   description: string;
   mandatory: boolean;
   answers: string[];
+  hasOtherOption?: boolean;
+  otherOptionText?: string;
 };
 
 export type LikertScale = {

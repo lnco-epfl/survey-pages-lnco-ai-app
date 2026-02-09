@@ -26,7 +26,14 @@ const MultiAnswerSettingsView: FC<MultiAnswerSettingsViewProps> = ({
   const { t } = useTranslation('translations', {
     keyPrefix: 'SETTINGS.SECTIONS',
   });
-  const { question, answers, description, mandatory } = questionObject;
+  const {
+    question,
+    answers,
+    description,
+    mandatory,
+    hasOtherOption,
+    otherOptionText,
+  } = questionObject;
 
   const answerFields = answers.map((answer, index) => (
     <Box
@@ -102,6 +109,27 @@ const MultiAnswerSettingsView: FC<MultiAnswerSettingsViewProps> = ({
           {t('ADD_ANSWER')}
         </Button>
       </Box>
+      <FormControlLabel
+        control={<Switch />}
+        label="Include 'Other' Option"
+        onChange={(e, checked) =>
+          onChange({
+            ...questionObject,
+            hasOtherOption: checked,
+            otherOptionText: checked ? 'Other, please specify' : '',
+          })
+        }
+        checked={hasOtherOption ?? false}
+      />
+      {hasOtherOption && (
+        <TextField
+          value={otherOptionText || ''}
+          label="Other Option Text"
+          onChange={(e) =>
+            onChange({ ...questionObject, otherOptionText: e.target.value })
+          }
+        />
+      )}
     </Stack>
   );
 };

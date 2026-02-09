@@ -103,6 +103,8 @@ const buildTimelineFromSurvey = (
             isRequired: element.mandatory,
             randomize_question_order: true,
             allow_multiple: true,
+            hasOther: element.hasOtherOption ?? false,
+            otherText: element.otherOptionText || 'Other (please specify)',
             name: element.name,
             defaultValue:
               (previousResponses[element.name] as string[]) || undefined,
@@ -199,18 +201,8 @@ const buildTimelineFromSurvey = (
       onCurrentPageChanged: { add: (arg0: () => void) => void };
       currentPageNo: number;
     }) => {
-      const resetScroll = (): void => {
-        const container = document.querySelector('.jspsych-display-element');
-        if (container instanceof HTMLElement) {
-          container.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-          return;
-        }
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      };
-
-      resetScroll();
       survey.onCurrentPageChanged.add(() => {
-        resetScroll();
+        // window.scrollTo(0, 0);
         // Update progress bar: currentPageNo is 0-indexed, so add 1
         const progress = survey.currentPageNo / totalPages;
         if (jsPsych.progressBar) {
