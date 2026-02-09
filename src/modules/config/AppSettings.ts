@@ -18,6 +18,7 @@ export enum QuestionTypes {
   MultiAnswer = 'multiAnswer',
   LikertScale = 'likertScale',
   LikertBlock = 'likertBlock',
+  TableInput = 'tableInput',
 }
 
 export enum OtherElementType {
@@ -82,13 +83,32 @@ export type LikertBlock = {
   scale: string[];
 };
 
+export type TableColumn = {
+  name: string; // internal ID
+  label: string; // display label
+  inputType: 'text' | 'number' | 'date';
+  required: boolean; // is this column required per row
+};
+
+export type TableInput = {
+  type: QuestionTypes.TableInput;
+  question: string;
+  name: string;
+  description: string;
+  mandatory: boolean;
+  columns: TableColumn[];
+  minRows: number;
+  maxRows: number;
+};
+
 export type Question =
   | ShortAnswer
   | LongAnswer
   | MultipleChoice
   | MultiAnswer
   | LikertScale
-  | LikertBlock;
+  | LikertBlock
+  | TableInput;
 
 export type TextElement = {
   type: OtherElementType.Text;

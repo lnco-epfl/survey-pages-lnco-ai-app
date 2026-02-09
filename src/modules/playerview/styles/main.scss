@@ -275,8 +275,8 @@ h1 {
 .sd-title.sd-element__title,
 .sd-element__title span {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.5rem;
-  line-height: 1.6rem;
+  font-size: 1.3rem;
+  line-height: 1.4rem;
   color: #2c3e50;
   font-weight: 600;
   margin: 0px;
@@ -370,10 +370,10 @@ textarea.sd-input.sd-comment {
 
 .sd-comment:focus,
 textarea.sd-input.sd-comment:focus {
-  outline: none !important;
-  border-color: #444 !important;
-  box-shadow: 0 0 0 3px rgba(68, 68, 68, 0.1) !important;
-  background-color: #ffffff !important;
+  outline: none;
+  border-color: #444;
+  box-shadow: 0 0 0 3px rgba(68, 68, 68, 0.1);
+  background-color: #ffffff;
 }
 
 .sd-comment::placeholder,
@@ -396,12 +396,22 @@ textarea.sd-input.sd-comment::placeholder {
 }
 
 .sd-item {
-  padding: 10px 12px;
+  padding: 0; /* Remove padding from container */
   margin: 6px 0;
   border-radius: 8px;
   transition: all 0.2s ease;
   background-color: #f8f9fa;
   border: 2px solid transparent;
+  cursor: pointer; /* Make cursor indicate clickability */
+}
+
+/* Make the label fill the entire item div */
+.sd-item .sd-selectbase__label {
+  display: block;
+  width: 100%;
+  padding: 10px 12px; /* Move padding from .sd-item to label */
+  cursor: pointer;
+  margin: 0;
 }
 
 .sd-item:hover {
@@ -409,7 +419,7 @@ textarea.sd-input.sd-comment::placeholder {
 }
 
 .sd-item--checked {
-  background-color: #e9ecef !important;
+  background-color: #e9ecef;
   box-shadow: 0 0 0 2px rgba(68, 68, 68, 0.1);
 }
 
@@ -468,10 +478,10 @@ input[type='checkbox'] {
 
 /* Highlight questions with errors */
 .sd-question--error .sd-element--with-frame {
-  border: 2px solid #e74c3c !important;
+  border: 2px solid #e74c3c;
   box-shadow:
     0 0 0 3px rgba(231, 76, 60, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    0 2px 8px rgba(0, 0, 0, 0.08);
   animation: shake 0.4s ease-in-out;
 }
 
@@ -493,15 +503,15 @@ input[type='checkbox'] {
 .sd-question--error input[type='number'],
 .sd-question--error input[type='date'],
 .sd-question--error textarea.sd-comment {
-  border-color: #e74c3c !important;
+  border-color: #e74c3c;
 }
 
 .sd-question--error input[type='text']:focus,
 .sd-question--error input[type='number']:focus,
 .sd-question--error input[type='date']:focus,
 .sd-question--error textarea.sd-comment:focus {
-  border-color: #e74c3c !important;
-  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
 }
 
 /* Likert block styling */
@@ -590,11 +600,192 @@ input[type='checkbox'] {
   display: none;
 }
 
+/* Table Input (Panel Dynamic) Styles */
+.sd-paneldynamic {
+  border: none;
+  padding: 0;
+}
+
+.sd-paneldynamic__panel-wrapper {
+  margin-bottom: 16px;
+  padding: 16px;
+  padding-top: 40px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.sd-paneldynamic__panel-wrapper:hover {
+  border-color: #bbb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Fix the panel content layout - make it a proper grid */
+.sd-paneldynamic__panel-wrapper .sd-panel__content {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 12px !important;
+  align-items: start !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+/* Each row should take one grid cell */
+.sd-paneldynamic__panel-wrapper .sd-panel__content > .sd-row {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Force question wrappers to stay contained */
+.sd-paneldynamic__panel-wrapper .sd-row > div {
+  flex: none !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* Override inline styles on question wrappers */
+.sd-paneldynamic__panel-wrapper .sd-row > div[style] {
+  flex: none !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* Each question should be properly contained */
+.sd-paneldynamic .sd-question {
+  margin-bottom: 0;
+  width: 100% !important;
+}
+
+/* Make column headers (question titles) smaller */
+.sd-paneldynamic__panel-wrapper .sd-question__title {
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+/* Hide ALL navigation buttons and progress indicators */
+.sd-paneldynamic__prev-btn,
+.sd-paneldynamic__next-btn,
+.sd-paneldynamic__progress-text,
+#sv-pd-prev-btn,
+#sv-pd-next-btn,
+#sv-prev-btn-icon,
+#sv-pd-next-btn-icon,
+#sv-pd-progress-text,
+.sv-action--hidden,
+button[title='Previous'],
+button[title='Next'],
+.sd-paneldynamic__buttons-container .sv-action:not(#sv-pd-add-btn) {
+  display: none !important;
+}
+
+/* Add button styling - make sure it's visible */
+#sv-pd-add-btn,
+.sd-paneldynamic__add-btn {
+  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: linear-gradient(135deg, #666 0%, #444 100%) !important;
+  color: white;
+  display: inline-block;
+  visibility: visible;
+  position: static;
+  opacity: 1;
+}
+
+#sv-pd-add-btn:hover,
+.sd-paneldynamic__add-btn:hover {
+  background: linear-gradient(135deg, #555 0%, #333 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Remove button - small circular icon in top-right corner */
+.sd-paneldynamic__remove-btn,
+.sd-panel__remove-btn,
+button[id*='remove_button'] {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  line-height: 28px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: rgba(231, 76, 60, 0.7) !important;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  visibility: visible;
+  z-index: 10;
+}
+
+.sd-paneldynamic__remove-btn:hover,
+.sd-panel__remove-btn:hover,
+button[id*='remove_button']:hover {
+  opacity: 1;
+  background: rgba(231, 76, 60, 1) !important;
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(231, 76, 60, 0.4);
+}
+
+/* Hide the icon span inside remove button, show only text */
+.sd-paneldynamic__remove-btn .sd-hidden,
+button[id*='remove_button'] .sd-hidden {
+  display: none;
+}
+
+.sd-paneldynamic__footer,
+.sd-paneldynamic__buttons-container {
+  margin-top: 16px;
+  display: block;
+}
+
+/* Table input fields within panel */
+.sd-paneldynamic .sd-input,
+.sd-panel .sd-input {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 10px 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: white;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box !important;
+}
+
+.sd-paneldynamic .sd-input:focus,
+.sd-panel .sd-input:focus {
+  border-color: #666;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 102, 102, 0.1);
+}
+
 /* Show native checkbox */
 .sd-item__control {
-  position: static !important;
-  opacity: 1 !important;
-  width: auto !important;
-  height: auto !important;
-  transform: none !important;
+  position: static;
+  opacity: 1;
+  width: auto;
+  height: auto;
+  transform: none;
 }

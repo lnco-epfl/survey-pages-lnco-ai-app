@@ -140,6 +140,38 @@ const buildTimelineFromSurvey = (
           });
           break;
 
+        case QuestionTypes.TableInput:
+          pageQuestions.push({
+            type: 'paneldynamic',
+            name: element.name,
+            title: element.question,
+            description: element.description,
+            isRequired: element.mandatory,
+            templateElements: element.columns.map((col) => ({
+              type: 'text',
+              name: col.name,
+              title: col.label,
+              isRequired: col.required,
+              inputType: col.inputType,
+            })),
+            panelCount: element.minRows,
+            minPanelCount: element.minRows,
+            maxPanelCount: element.maxRows,
+            panelAddText: '+ Add Row',
+            panelRemoveText: '×',
+            confirmDelete: false,
+            panelRemoveButtonLocation: 'right',
+            showQuestionNumbers: 'off',
+            showRangeInProgress: false,
+            renderMode: 'list',
+            templateTitle: '',
+            defaultValue:
+              (previousResponses[element.name] as Array<
+                Record<string, unknown>
+              >) || undefined,
+          });
+          break;
+
         case OtherElementType.Text:
           pageQuestions.push({
             type: 'html',
@@ -159,12 +191,22 @@ const buildTimelineFromSurvey = (
     elements: questions,
   }));
 
+  const totalPages = pages.length;
+
   timeline.push({
     type: jsPsychSurvey,
     survey_function: (survey: {
       onCurrentPageChanged: { add: (arg0: () => void) => void };
+      currentPageNo: number;
     }) => {
       survey.onCurrentPageChanged.add(() => {
+        window.scrollTo(0, 0);
+        // Update progress bar: currentPageNo is 0-indexed, so add 1
+        const progress = survey.currentPageNo / totalPages;
+        if (jsPsych.progressBar) {
+          // eslint-disable-next-line no-param-reassign
+          jsPsych.progressBar.progress = progress;
+        }
         updateData(jsPsych.data.get(), settings);
       });
     },
@@ -213,6 +255,10 @@ const getEndPage = (
   choices: 'NO_KEYS',
   stimulus: `<div class='sd-html'><h5>${title}</h5><p>${description}</p><a class='link-to-experiment' target="_parent" href=${link}>${linkText}</a></div>`,
   on_start: (): void => {
+    if (jspsych.progressBar) {
+      // eslint-disable-next-line no-param-reassign
+      jspsych.progressBar.progress = 1;
+    }
     updateData(jspsych.data.get(), input);
   },
 });
