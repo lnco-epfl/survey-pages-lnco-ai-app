@@ -133,11 +133,20 @@ const getFinalConfirmationPage = (settings: AppSettings): Pages | null => {
 
   const questionLabelByName = getQuestionLabelByName(settings);
 
-  const reviewItems = exclusionSettings.criteria
-    .map((criterion) => {
-      const questionLabel =
-        questionLabelByName[criterion.questionName] || criterion.questionName;
-      return `<li><strong>${questionLabel}</strong>: {${criterion.questionName}}</li>`;
+  const uniqueQuestionNames = exclusionSettings.criteria.reduce<string[]>(
+    (acc, criterion) => {
+      if (!acc.includes(criterion.questionName)) {
+        acc.push(criterion.questionName);
+      }
+      return acc;
+    },
+    [],
+  );
+
+  const reviewItems = uniqueQuestionNames
+    .map((questionName) => {
+      const questionLabel = questionLabelByName[questionName] || questionName;
+      return `<li><strong>${questionLabel}</strong>: {${questionName}}</li>`;
     })
     .join('');
 
