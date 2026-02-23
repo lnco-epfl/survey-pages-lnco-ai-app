@@ -2,6 +2,7 @@ export type AppSettings = {
   sectionSettings: SectionSettings;
   fullScreenSettings: FullScreenSettings;
   nextStepSettings: NextStepSettings;
+  exclusionSettings: ExclusionSettings;
 };
 
 export type SectionSettings = {
@@ -139,4 +140,28 @@ export type NextStepSettings = {
   description: string;
   link: string;
   linkText: string;
+};
+
+export enum ExclusionOperator {
+  Equals = 'equals',
+  NotEquals = 'notEquals',
+  Includes = 'includes',
+}
+
+export type ExclusionCriterion = {
+  questionName: string;
+  operator: ExclusionOperator;
+  value: string;
+};
+
+export type ExclusionSettings = {
+  enabled: boolean;
+  requireFinalConfirmation: boolean;
+  matchMode: 'any' | 'all';
+  criteria: ExclusionCriterion[];
+  confirmationTitle: string;
+  confirmationDescription: string;
+  confirmationCheckboxLabel: string;
+  exclusionTitle: string;
+  exclusionDescription: string;
 };

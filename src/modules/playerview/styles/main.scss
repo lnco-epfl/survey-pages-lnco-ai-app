@@ -1,10 +1,15 @@
 //@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
 //@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
+.player-view {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
 @media (display-mode: fullscreen) {
   .player-view {
     height: 100vh;
-    background-color: rgb(49, 49, 49);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   }
 }
 

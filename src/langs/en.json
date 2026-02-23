@@ -31,6 +31,28 @@
         "LINK_PAGE_LABEL": "Link Page Content",
         "LINK_TEXT_LABEL": "Link Text"
       },
+      "EXCLUSION": {
+        "ENABLE_LABEL": "Enable end-of-survey exclusion check",
+        "TITLE": "Exclusion Criteria",
+        "REQUIRE_CONFIRMATION": "Require final confirmation before submit",
+        "MATCH_MODE": "Match mode",
+        "MATCH_ANY": "Exclude when any rule matches",
+        "MATCH_ALL": "Exclude only when all rules match",
+        "CRITERIA_TITLE": "Rules",
+        "QUESTION_NAME": "Question name",
+        "OPERATOR": "Operator",
+        "OPERATOR_EQUALS": "Equals",
+        "OPERATOR_NOT_EQUALS": "Not equals",
+        "OPERATOR_INCLUDES": "Contains",
+        "VALUE": "Value",
+        "ADD_CRITERION": "Add rule",
+        "REMOVE_CRITERION": "Remove rule",
+        "CONFIRMATION_TITLE": "Final check title",
+        "CONFIRMATION_DESCRIPTION": "Final check description",
+        "CONFIRMATION_CHECKBOX_LABEL": "Confirmation checkbox label",
+        "EXCLUSION_TITLE": "Exclusion screen title",
+        "EXCLUSION_DESCRIPTION": "Exclusion screen description"
+      },
       "SECTIONS": {
         "MANDATORY_LABEL": "Mandatory",
         "QUESTION_LABEL": "Question",

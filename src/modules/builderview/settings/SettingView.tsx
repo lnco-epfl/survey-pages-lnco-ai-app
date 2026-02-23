@@ -8,12 +8,16 @@ import Stack from '@mui/material/Stack';
 import { isEqual } from 'lodash';
 
 import {
+  ExclusionSettings,
   FullScreenSettings,
   NextStepSettings,
+  OtherElementType,
+  QuestionTypes,
   SectionSettings,
 } from '@/modules/config/AppSettings';
 import { useSettings } from '@/modules/context/SettingsContext';
 
+import ExclusionSettingsView from './ExclusionSettingsView';
 import FullScreenSettingsView from './FullScreenSettingsView';
 import NextStepSettingsView from './NextStepSettingsView';
 import SectionSettingsView from './SectionSettingsView';
@@ -26,6 +30,7 @@ const SettingsView: FC = () => {
     sectionSettings: sectionSavedState,
     fullScreenSettings: fullScreenSavedState,
     nextStepSettings: nextStepSettingsSavedState,
+    exclusionSettings: exclusionSettingsSavedState,
     saveSettings,
   } = useSettings();
 
@@ -35,18 +40,44 @@ const SettingsView: FC = () => {
   const [nextStepSettings, setNextStepSettings] = useState<NextStepSettings>(
     nextStepSettingsSavedState,
   );
+  const [exclusionSettings, setExclusionSettings] = useState<ExclusionSettings>(
+    exclusionSettingsSavedState,
+  );
+
+  const questionOptions = useMemo(
+    () =>
+      sections.sections
+        .flat()
+        .filter((element) => element.type !== OtherElementType.Text)
+        .map((element) => {
+          if (element.type === QuestionTypes.LikertBlock) {
+            return {
+              value: element.name,
+              label: element.description || element.name,
+            };
+          }
+
+          return {
+            value: element.name,
+            label: element.question || element.name,
+          };
+        }),
+    [sections.sections],
+  );
 
   const saveAllSettings = (): void => {
     saveSettings('sectionSettings', sections);
     saveSettings('nextStepSettings', nextStepSettings);
     saveSettings('fullScreenSettings', fullScreenSettings);
+    saveSettings('exclusionSettings', exclusionSettings);
   };
 
   const disableSave = useMemo(() => {
     if (
       isEqual(sectionSavedState, sections) &&
       isEqual(fullScreenSavedState, fullScreenSettings) &&
-      isEqual(nextStepSettingsSavedState, nextStepSettings)
+      isEqual(nextStepSettingsSavedState, nextStepSettings) &&
+      isEqual(exclusionSettingsSavedState, exclusionSettings)
     ) {
       return true;
     }
@@ -58,6 +89,8 @@ const SettingsView: FC = () => {
     fullScreenSettings,
     nextStepSettingsSavedState,
     nextStepSettings,
+    exclusionSettingsSavedState,
+    exclusionSettings,
   ]);
 
   return (
@@ -79,6 +112,13 @@ const SettingsView: FC = () => {
         nextStepSettings={nextStepSettings}
         onChange={(newSetting: NextStepSettings) => {
           setNextStepSettings(newSetting);
+        }}
+      />
+      <ExclusionSettingsView
+        exclusionSettings={exclusionSettings}
+        questionOptions={questionOptions}
+        onChange={(newSetting: ExclusionSettings) => {
+          setExclusionSettings(newSetting);
         }}
       />
       <Box>

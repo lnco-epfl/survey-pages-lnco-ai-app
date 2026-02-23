@@ -29,6 +29,19 @@ const defaultSettingsValues: AllSettingsType = {
     link: '',
     linkText: '',
   },
+  exclusionSettings: {
+    enabled: false,
+    requireFinalConfirmation: true,
+    matchMode: 'any',
+    criteria: [],
+    confirmationTitle: 'Final Check',
+    confirmationDescription:
+      'Please review and confirm your answers used for eligibility before submitting.',
+    confirmationCheckboxLabel: 'I confirm these answers are correct.',
+    exclusionTitle: 'Thank you for your interest',
+    exclusionDescription:
+      'Based on your responses, you are not eligible to continue in this study.',
+  },
 };
 
 // list of the settings names
@@ -36,6 +49,7 @@ const ALL_SETTING_NAMES = [
   'sectionSettings',
   'fullScreenSettings',
   'nextStepSettings',
+  'exclusionSettings',
 ] as const;
 
 // automatically generated types

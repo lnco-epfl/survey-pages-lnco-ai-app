@@ -10,6 +10,8 @@ import { DataCollection, JsPsych, initJsPsych } from 'jspsych';
 import { ExperimentResult } from '@/modules/config/AppResults';
 import {
   AppSettings,
+  ExclusionCriterion,
+  ExclusionOperator,
   OtherElementType,
   QuestionTypes,
 } from '@/modules/config/AppSettings';
@@ -27,8 +29,136 @@ export type Trial = {
 
 export type Pages = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  type: string;
 } & Record<string, unknown>;
+
+const FINAL_CONFIRMATION_NAME = '__final_eligibility_confirmation__';
+
+const getLatestResponse = (
+  trials: Array<Record<string, unknown>>,
+): Record<string, unknown> => {
+  const latestResponseTrial = [...trials]
+    .reverse()
+    .find(
+      (trial) =>
+        typeof trial.response === 'object' &&
+        trial.response !== null &&
+        !Array.isArray(trial.response),
+    );
+
+  return (latestResponseTrial?.response as Record<string, unknown>) || {};
+};
+
+const normalizeForComparison = (value: unknown): string => {
+  if (value === null || value === undefined) {
+    return '';
+  }
+  if (typeof value === 'string') {
+    return value;
+  }
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return `${value}`;
+  }
+  return JSON.stringify(value);
+};
+
+const criterionMatches = (
+  response: Record<string, unknown>,
+  criterion: ExclusionCriterion,
+): boolean => {
+  const answer = response[criterion.questionName];
+  const answerString = normalizeForComparison(answer).toLowerCase();
+  const expectedString = criterion.value.toLowerCase();
+
+  switch (criterion.operator) {
+    case ExclusionOperator.Equals:
+      return answerString === expectedString;
+    case ExclusionOperator.NotEquals:
+      return answerString !== expectedString;
+    case ExclusionOperator.Includes:
+      return answerString.includes(expectedString);
+    default:
+      return false;
+  }
+};
+
+const isExcludedByCriteria = (
+  settings: AppSettings,
+  response: Record<string, unknown>,
+): boolean => {
+  const { exclusionSettings } = settings;
+  if (!exclusionSettings.enabled || exclusionSettings.criteria.length === 0) {
+    return false;
+  }
+
+  const matches = exclusionSettings.criteria.map((criterion) =>
+    criterionMatches(response, criterion),
+  );
+
+  if (exclusionSettings.matchMode === 'all') {
+    return matches.every(Boolean);
+  }
+  return matches.some(Boolean);
+};
+
+const getQuestionLabelByName = (
+  settings: AppSettings,
+): Record<string, string> => {
+  const labels: Record<string, string> = {};
+
+  settings.sectionSettings.sections.flat().forEach((element) => {
+    if (element.type === OtherElementType.Text) {
+      return;
+    }
+
+    if (element.type === QuestionTypes.LikertBlock) {
+      labels[element.name] = element.description || element.name;
+      return;
+    }
+
+    labels[element.name] = element.question || element.name;
+  });
+
+  return labels;
+};
+
+const getFinalConfirmationPage = (settings: AppSettings): Pages | null => {
+  const { exclusionSettings } = settings;
+  if (
+    !exclusionSettings.enabled ||
+    !exclusionSettings.requireFinalConfirmation ||
+    exclusionSettings.criteria.length === 0
+  ) {
+    return null;
+  }
+
+  const questionLabelByName = getQuestionLabelByName(settings);
+
+  const reviewItems = exclusionSettings.criteria
+    .map((criterion) => {
+      const questionLabel =
+        questionLabelByName[criterion.questionName] || criterion.questionName;
+      return `<li><strong>${questionLabel}</strong>: {${criterion.questionName}}</li>`;
+    })
+    .join('');
+
+  return {
+    name: 'final-check-page',
+    elements: [
+      {
+        type: 'html',
+        html: `<div><h2>${exclusionSettings.confirmationTitle}</h2><p>${exclusionSettings.confirmationDescription}</p><ul>${reviewItems}</ul></div>`,
+      },
+      {
+        type: 'checkbox',
+        name: FINAL_CONFIRMATION_NAME,
+        title: '',
+        titleLocation: 'hidden',
+        choices: [exclusionSettings.confirmationCheckboxLabel],
+        isRequired: true,
+      },
+    ],
+  };
+};
 
 const buildTimelineFromSurvey = (
   jsPsych: JsPsych,
@@ -43,10 +173,7 @@ const buildTimelineFromSurvey = (
   const previousResponses: Record<string, unknown> = {};
 
   if (result?.rawData?.trials && result.rawData.trials.length > 0) {
-    const lastTrial = result.rawData.trials[result.rawData.trials.length - 1];
-    if (lastTrial.response) {
-      Object.assign(previousResponses, lastTrial.response);
-    }
+    Object.assign(previousResponses, getLatestResponse(result.rawData.trials));
   }
 
   settings.sectionSettings.sections.forEach((section) => {
@@ -194,6 +321,11 @@ const buildTimelineFromSurvey = (
   }));
 
   const totalPages = pages.length;
+  const finalConfirmationPage = getFinalConfirmationPage(settings);
+  const surveyPages =
+    finalConfirmationPage !== null
+      ? [...pageJson, finalConfirmationPage]
+      : pageJson;
 
   timeline.push({
     type: jsPsychSurvey,
@@ -213,7 +345,7 @@ const buildTimelineFromSurvey = (
       });
     },
     survey_json: {
-      pages: pageJson,
+      pages: surveyPages,
       showQuestionNumbers: false,
       completeText:
         settings.sectionSettings.pageButtonSettings.finishSurveyText,
@@ -244,24 +376,33 @@ const getFullScreenTrial = (): Trial => ({
  *
  * @returns Returns a simple welcome screen that automatically triggers fullscreen when the start button is pressed
  */
-const getEndPage = (
+const getCompletionPage = (
   jspsych: JsPsych,
-  title: string,
-  description: string,
-  link: string,
-  linkText: string,
   updateData: (data: DataCollection, settings: AppSettings) => void,
-  input: AppSettings,
+  settings: AppSettings,
 ): Trial => ({
   type: htmlKeyboardResponse,
   choices: 'NO_KEYS',
-  stimulus: `<div class='sd-html'><h5>${title}</h5><p>${description}</p><a class='link-to-experiment' target="_parent" href=${link}>${linkText}</a></div>`,
+  stimulus: (): string => {
+    const response = getLatestResponse(jspsych.data.get().values());
+    const isExcluded = isExcludedByCriteria(settings, response);
+
+    if (isExcluded) {
+      return `<div class='sd-html'><h5>${settings.exclusionSettings.exclusionTitle}</h5><p>${settings.exclusionSettings.exclusionDescription}</p></div>`;
+    }
+
+    if (settings.nextStepSettings.linkToNextPage) {
+      return `<div class='sd-html'><h5>${settings.nextStepSettings.title}</h5><p>${settings.nextStepSettings.description}</p><a class='link-to-experiment' target="_parent" href=${settings.nextStepSettings.link}>${settings.nextStepSettings.linkText}</a></div>`;
+    }
+
+    return "<div class='sd-html'><h5>Thank you</h5><p>Your responses were submitted successfully.</p></div>";
+  },
   on_start: (): void => {
     if (jspsych.progressBar) {
       // eslint-disable-next-line no-param-reassign
       jspsych.progressBar.progress = 1;
     }
-    updateData(jspsych.data.get(), input);
+    updateData(jspsych.data.get(), settings);
   },
 });
 
@@ -299,19 +440,7 @@ export async function run({
     ),
   );
 
-  if (input.settings.nextStepSettings.linkToNextPage) {
-    jsPsychTimeline.push(
-      getEndPage(
-        jsPsych,
-        input.settings.nextStepSettings.title,
-        input.settings.nextStepSettings.description,
-        input.settings.nextStepSettings.link,
-        input.settings.nextStepSettings.linkText,
-        updateData,
-        input.settings,
-      ),
-    );
-  }
+  jsPsychTimeline.push(getCompletionPage(jsPsych, updateData, input.settings));
 
   await jsPsych.run(jsPsychTimeline);
 
