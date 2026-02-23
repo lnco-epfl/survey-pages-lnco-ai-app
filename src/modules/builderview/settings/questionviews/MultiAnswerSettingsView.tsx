@@ -1,10 +1,12 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
   Button,
   FormControlLabel,
+  IconButton,
   Switch,
   TextField,
 } from '@mui/material';
@@ -24,22 +26,48 @@ const MultiAnswerSettingsView: FC<MultiAnswerSettingsViewProps> = ({
   const { t } = useTranslation('translations', {
     keyPrefix: 'SETTINGS.SECTIONS',
   });
-  const { question, answers, description, mandatory } = questionObject;
+  const {
+    question,
+    answers,
+    description,
+    mandatory,
+    hasOtherOption,
+    otherOptionText,
+  } = questionObject;
 
   const answerFields = answers.map((answer, index) => (
-    <TextField
+    <Box
       key={index}
-      value={answer}
-      label={`${t('ANSWER_LABEL')} ${index + 1}`}
-      onChange={(e) =>
-        onChange({
-          ...questionObject,
-          answers: questionObject.answers.map((oldAnswer, i) =>
-            i === index ? e.target.value : oldAnswer,
-          ),
-        })
-      }
-    />
+      sx={{ display: 'flex', gap: 1, alignItems: 'center', mt: 1.5 }}
+    >
+      <TextField
+        fullWidth
+        value={answer}
+        label={`${t('ANSWER_LABEL')} ${index + 1}`}
+        onChange={(e) =>
+          onChange({
+            ...questionObject,
+            answers: questionObject.answers.map((oldAnswer, i) =>
+              i === index ? e.target.value : oldAnswer,
+            ),
+          })
+        }
+      />
+      <IconButton
+        onClick={() =>
+          onChange({
+            ...questionObject,
+            answers: questionObject.answers.filter((_, i) => i !== index),
+          })
+        }
+        disabled={answers.length <= 1}
+        size="small"
+        color="error"
+        sx={{ opacity: 0.6, '&:hover': { opacity: 1 } }}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </Box>
   ));
 
   // Function to handle adding a new answer
@@ -81,6 +109,27 @@ const MultiAnswerSettingsView: FC<MultiAnswerSettingsViewProps> = ({
           {t('ADD_ANSWER')}
         </Button>
       </Box>
+      <FormControlLabel
+        control={<Switch />}
+        label="Include 'Other' Option"
+        onChange={(e, checked) =>
+          onChange({
+            ...questionObject,
+            hasOtherOption: checked,
+            otherOptionText: checked ? 'Other, please specify' : '',
+          })
+        }
+        checked={hasOtherOption ?? false}
+      />
+      {hasOtherOption && (
+        <TextField
+          value={otherOptionText || ''}
+          label="Other Option Text"
+          onChange={(e) =>
+            onChange({ ...questionObject, otherOptionText: e.target.value })
+          }
+        />
+      )}
     </Stack>
   );
 };

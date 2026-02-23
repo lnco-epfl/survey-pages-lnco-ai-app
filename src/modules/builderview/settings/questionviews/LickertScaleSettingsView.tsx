@@ -1,10 +1,12 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
   Button,
   FormControlLabel,
+  IconButton,
   Switch,
   TextField,
 } from '@mui/material';
@@ -27,19 +29,38 @@ const LikertScaleSettingsView: FC<LikertScaleSettingsViewProps> = ({
   const { question, scale, description, mandatory } = questionObject;
 
   const scaleFields = scale.map((scaleOption, index) => (
-    <TextField
+    <Box
       key={index}
-      value={scaleOption}
-      label={`${t('SCALE_OPTION_LABEL')} ${index + 1}`}
-      onChange={(e) =>
-        onChange({
-          ...questionObject,
-          scale: questionObject.scale.map((oldOption, i) =>
-            i === index ? e.target.value : oldOption,
-          ),
-        })
-      }
-    />
+      sx={{ display: 'flex', gap: 1, alignItems: 'center', mt: 1.5 }}
+    >
+      <TextField
+        fullWidth
+        value={scaleOption}
+        label={`${t('SCALE_OPTION_LABEL')} ${index + 1}`}
+        onChange={(e) =>
+          onChange({
+            ...questionObject,
+            scale: questionObject.scale.map((oldOption, i) =>
+              i === index ? e.target.value : oldOption,
+            ),
+          })
+        }
+      />
+      <IconButton
+        onClick={() =>
+          onChange({
+            ...questionObject,
+            scale: questionObject.scale.filter((_, i) => i !== index),
+          })
+        }
+        disabled={scale.length <= 1}
+        size="small"
+        color="error"
+        sx={{ opacity: 0.6, '&:hover': { opacity: 1 } }}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </Box>
   ));
 
   // Function to handle adding a new scale option

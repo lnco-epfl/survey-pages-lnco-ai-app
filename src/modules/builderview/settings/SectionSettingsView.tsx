@@ -26,6 +26,7 @@ import {
   ShortAnswer,
   SurveyElement,
   SurveyElementType,
+  TableInput,
   TextElement,
 } from '@/modules/config/AppSettings';
 
@@ -36,6 +37,7 @@ import LongAnswerSettingsView from './questionviews/LongAnswerSettingsView';
 import MultiAnswerSettingsView from './questionviews/MultiAnswerSettingsView';
 import MultipleChoiceSettingsView from './questionviews/MultipleChoiceSettingsView';
 import ShortAnswerSettingsView from './questionviews/ShortAnswerSettingsView';
+import TableInputSettingsView from './questionviews/TableInputSettingsView';
 import TextElementSettingsView from './questionviews/TextElementSettingsView';
 
 type SectionSettingsViewProps = {
@@ -133,6 +135,25 @@ const SectionSettingsView: FC<SectionSettingsViewProps> = ({
             'Agree',
             'Strongly Agree',
           ],
+        };
+        break;
+      case QuestionTypes.TableInput:
+        newItem = {
+          type: QuestionTypes.TableInput,
+          name: createQuestionId(),
+          question: '',
+          description: '',
+          mandatory: false,
+          columns: [
+            {
+              name: 'column1',
+              label: 'Column 1',
+              inputType: 'text',
+              required: false,
+            },
+          ],
+          minRows: 1,
+          maxRows: 10,
         };
         break;
       case OtherElementType.Text:
@@ -496,6 +517,18 @@ const SectionSettingsView: FC<SectionSettingsViewProps> = ({
                     />
                   </Stack>
                 );
+              case QuestionTypes.TableInput:
+                return (
+                  <Stack spacing={1}>
+                    {elementHeaderArea(index, pageNr, QuestionTypes.TableInput)}
+                    <TableInputSettingsView
+                      questionObject={element as TableInput}
+                      onChange={(newQuestion: TableInput) =>
+                        onChangeQuestion(index, pageNr, newQuestion)
+                      }
+                    />
+                  </Stack>
+                );
               case OtherElementType.Text:
                 return (
                   <Stack spacing={1}>
@@ -590,6 +623,16 @@ const SectionSettingsView: FC<SectionSettingsViewProps> = ({
                       }
                     >
                       {t('ADD_LB_QUESTION')}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() =>
+                        onChange(
+                          handleAddNewItem(QuestionTypes.TableInput, pageNr),
+                        )
+                      }
+                    >
+                      Add Table Input
                     </Button>
                     <Button
                       variant="contained"
