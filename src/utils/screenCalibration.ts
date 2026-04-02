@@ -22,9 +22,11 @@ const isValidFontSize = (value: unknown): value is FontSizeOption =>
 export const parseScreenCalibration = (
   localContext: unknown,
 ): ScreenCalibration | undefined => {
+  // eslint-disable-next-line no-console
   console.log('Parsing screenCalibration from localContext:', localContext);
   const calibration = (localContext as { screenCalibration?: unknown })
     ?.screenCalibration;
+  // eslint-disable-next-line no-console
   console.log('Raw screenCalibration from localContext:', calibration);
 
   if (!calibration || typeof calibration !== 'object') {

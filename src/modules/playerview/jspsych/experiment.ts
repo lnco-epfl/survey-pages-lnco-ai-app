@@ -494,7 +494,9 @@ export async function run({
     input.settings.fullScreenSettings.fontSize ??
     'normal';
 
+  // eslint-disable-next-line no-console
   console.log('Applied font size:', appliedFontSize);
+  // eslint-disable-next-line no-console
   console.log('screenCalibration:', input.screenCalibration);
 
   const addFontSizeMenu = (): void => {
