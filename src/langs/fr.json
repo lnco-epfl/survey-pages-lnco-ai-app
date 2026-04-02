@@ -9,7 +9,12 @@
         "LABEL_PAGE_PER_QUESTION": "Afficher chaque question sur une nouvelle page",
         "LANGUAGE_LABEL": "Langue du lecteur",
         "LANGUAGE_ENGLISH": "English",
-        "LANGUAGE_FRENCH": "Français"
+        "LANGUAGE_FRENCH": "Français",
+        "FONT_SIZE_LABEL": "Taille de police",
+        "FONT_SIZE_SMALL": "Petite",
+        "FONT_SIZE_NORMAL": "Normale",
+        "FONT_SIZE_LARGE": "Grande",
+        "FONT_SIZE_EXTRA_LARGE": "Très grande"
       },
       "PLAYER": {
         "BEGIN_EXPERIMENT": "Commencer l'expérience",
@@ -18,6 +23,8 @@
         "BUTTON_PREVIOUS": "Précédent",
         "BUTTON_SUBMIT": "Soumettre",
         "BUTTON_ADD_ROW": "Ajouter une ligne",
+        "FONT_SIZE_LABEL": "Taille de police :",
+        "BUTTON_FULLSCREEN": "Plein écran",
         "THANK_YOU_TITLE": "Merci",
         "THANK_YOU_DESCRIPTION": "Vos réponses ont été soumises avec succès."
       }

@@ -24,7 +24,12 @@
         "LABEL_PAGE_PER_QUESTION": "Display each question on a new page",
         "LANGUAGE_LABEL": "Player language",
         "LANGUAGE_ENGLISH": "English",
-        "LANGUAGE_FRENCH": "Français"
+        "LANGUAGE_FRENCH": "Fran\u00e7ais",
+        "FONT_SIZE_LABEL": "Font size",
+        "FONT_SIZE_SMALL": "Small",
+        "FONT_SIZE_NORMAL": "Normal",
+        "FONT_SIZE_LARGE": "Large",
+        "FONT_SIZE_EXTRA_LARGE": "Extra Large"
       },
       "PLAYER": {
         "BEGIN_EXPERIMENT": "Begin the Experiment",
@@ -33,6 +38,8 @@
         "BUTTON_PREVIOUS": "Previous",
         "BUTTON_SUBMIT": "Submit",
         "BUTTON_ADD_ROW": "Add Row",
+        "FONT_SIZE_LABEL": "Font Size:",
+        "BUTTON_FULLSCREEN": "Fullscreen",
         "THANK_YOU_TITLE": "Thank you",
         "THANK_YOU_DESCRIPTION": "Your responses were submitted successfully."
       },

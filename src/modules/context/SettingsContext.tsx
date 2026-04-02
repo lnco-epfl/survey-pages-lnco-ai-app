@@ -22,6 +22,7 @@ const defaultSettingsValues: AllSettingsType = {
     fullScreen: false,
     pagePerQuestion: true,
     language: 'en',
+    fontSize: 'normal',
   },
   nextStepSettings: {
     linkToNextPage: false,

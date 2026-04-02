@@ -35,6 +35,7 @@ h1 {
 
 /* div rendered by jsPsych */
 .jspsych-display-element {
+  --player-font-scale: 1;
   display: flex;
   margin: auto;
   flex: 1 1 100%;
@@ -54,6 +55,7 @@ h1 {
 
 /* Font size calibration scaling */
 .jspsych-display-element[data-font-size='small'] {
+  --player-font-scale: 0.8;
   font-size: 1rem;
 
   h1 {
@@ -71,6 +73,7 @@ h1 {
 }
 
 .jspsych-display-element[data-font-size='normal'] {
+  --player-font-scale: 1;
   font-size: 1.5rem;
 
   h1 {
@@ -88,6 +91,7 @@ h1 {
 }
 
 .jspsych-display-element[data-font-size='large'] {
+  --player-font-scale: 1.2;
   font-size: 2rem;
 
   h1 {
@@ -105,6 +109,7 @@ h1 {
 }
 
 .jspsych-display-element[data-font-size='extra-large'] {
+  --player-font-scale: 1.4;
   font-size: 2.5rem;
 
   h1 {
@@ -160,6 +165,39 @@ h1 {
   padding-right: 14px;
 }
 
+.jspsych-progress-label {
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 8px;
+  font-size: calc(0.9rem * var(--player-font-scale, 1));
+  color: #ffffff;
+}
+
+.custom-dropdown {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  font-size: calc(0.875rem * var(--player-font-scale, 1));
+  background: rgba(255, 255, 255, 0.95);
+  color: #2c3e50;
+}
+
+.jspsych-btn-progress-bar {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  font-size: calc(0.875rem * var(--player-font-scale, 1));
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.jspsych-btn-progress-bar:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 #jspsych-progressbar-outer {
   background-color: rgba(255, 255, 255, 0.3);
   width: 60%;
@@ -188,12 +226,13 @@ h1 {
 /* Custom button styling */
 .jspsych-btn {
   display: inline-block;
-  padding: 6px 12px;
+  padding: calc(6px * var(--player-font-scale, 1))
+    calc(12px * var(--player-font-scale, 1));
   margin: 0px;
   font-weight: 400;
   font-family: 'Nunito', 'Roboto', 'sans-serif';
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--player-font-scale, 1));
   cursor: pointer;
   line-height: 1.4;
   text-align: center;
@@ -247,13 +286,13 @@ h1 {
 .sd-html div,
 .sd-html p {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.5rem;
+  font-size: calc(1.5rem * var(--player-font-scale, 1));
   line-height: 1.6em;
   color: #313131;
 }
 .sd-html h5 {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.7rem;
+  font-size: calc(1.7rem * var(--player-font-scale, 1));
   line-height: 1.8rem;
   color: #313131;
 }
@@ -295,11 +334,12 @@ h1 {
 /* Survey button styling (same as JsPsych button) */
 .sd-btn {
   display: inline-block;
-  padding: 12px 28px;
+  padding: calc(12px * var(--player-font-scale, 1))
+    calc(28px * var(--player-font-scale, 1));
   margin: 8px;
   font-weight: 600;
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.125rem;
+  font-size: calc(1.125rem * var(--player-font-scale, 1));
   line-height: 1.5;
   cursor: pointer;
   text-align: center;
@@ -314,7 +354,7 @@ h1 {
     0 4px 6px rgba(0, 0, 0, 0.1),
     0 1px 3px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
-  min-width: 120px;
+  min-width: calc(120px * var(--player-font-scale, 1));
 }
 
 .sd-btn:hover {
@@ -348,7 +388,7 @@ h1 {
 .sd-title.sd-element__title,
 .sd-element__title span {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.3rem;
+  font-size: calc(1.3rem * var(--player-font-scale, 1));
   line-height: 1.4rem;
   color: #2c3e50;
   font-weight: 600;
@@ -366,7 +406,7 @@ h1 {
 
 .sd-item__control-label {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.5rem;
+  font-size: calc(1.5rem * var(--player-font-scale, 1));
   line-height: 1.6rem;
   color: #313131;
 }
@@ -374,12 +414,12 @@ h1 {
 .sd-element--with-frame {
   padding: 0px;
   box-shadow: none;
-  overflow: auto;
+  overflow: visible;
 }
 
 .jspsych-display-element input[type='text'] {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.5rem;
+  font-size: calc(1.5rem * var(--player-font-scale, 1));
   line-height: 1.6rem;
   color: #313131;
 }
@@ -395,14 +435,15 @@ h1 {
 .jspsych-display-element input[type='date'],
 .sd-input[type='date'] {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.125rem;
+  font-size: calc(1.125rem * var(--player-font-scale, 1));
   line-height: 1.5;
   color: #2c3e50;
   width: 40vw;
-  min-width: 250px;
+  min-width: calc(250px * var(--player-font-scale, 1));
   border: none;
   border-bottom: 2px solid #cbd5e0;
-  padding: 10px 6px;
+  padding: calc(10px * var(--player-font-scale, 1))
+    calc(6px * var(--player-font-scale, 1));
   background-color: transparent;
   transition: all 0.2s ease;
 }
@@ -426,13 +467,13 @@ h1 {
 .sd-comment,
 textarea.sd-input.sd-comment {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.125rem;
+  font-size: calc(1.125rem * var(--player-font-scale, 1));
   line-height: 1.6;
   color: #2c3e50;
   width: 50vw;
-  min-width: 320px;
-  min-height: 120px;
-  padding: 14px;
+  min-width: calc(320px * var(--player-font-scale, 1));
+  min-height: calc(120px * var(--player-font-scale, 1));
+  padding: calc(14px * var(--player-font-scale, 1));
   border: 2px solid #e2e8f0;
   border-radius: 8px;
   resize: vertical;
@@ -459,7 +500,7 @@ textarea.sd-input.sd-comment::placeholder {
   margin-top: 10px !important;
   min-height: 80px !important;
   width: 35vw !important;
-  min-width: 250px !important;
+  min-width: calc(250px * var(--player-font-scale, 1)) !important;
 }
 
 /* Multiple Choice */
@@ -482,7 +523,8 @@ textarea.sd-input.sd-comment::placeholder {
 .sd-item .sd-selectbase__label {
   display: block;
   width: 100%;
-  padding: 10px 12px; /* Move padding from .sd-item to label */
+  padding: calc(10px * var(--player-font-scale, 1))
+    calc(12px * var(--player-font-scale, 1)); /* Move padding from .sd-item to label */
   cursor: pointer;
   margin: 0;
 }
@@ -498,7 +540,7 @@ textarea.sd-input.sd-comment::placeholder {
 
 .sd-item__control-label {
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.125rem;
+  font-size: calc(1.125rem * var(--player-font-scale, 1));
   line-height: 1.6;
   color: #2c3e50;
   cursor: pointer;
@@ -508,9 +550,9 @@ textarea.sd-input.sd-comment::placeholder {
 /* Radio buttons and checkboxes - larger for accessibility */
 input[type='radio'],
 input[type='checkbox'] {
-  width: 20px;
-  height: 20px;
-  margin-right: 12px;
+  width: calc(20px * var(--player-font-scale, 1));
+  height: calc(20px * var(--player-font-scale, 1));
+  margin-right: calc(12px * var(--player-font-scale, 1));
   cursor: pointer;
   accent-color: #444;
 }
@@ -532,9 +574,10 @@ input[type='checkbox'] {
 .sd-element__erbox {
   color: #ffffff;
   background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  font-size: 1rem;
+  font-size: calc(1rem * var(--player-font-scale, 1));
   margin-bottom: 12px;
-  padding: 12px 16px;
+  padding: calc(12px * var(--player-font-scale, 1))
+    calc(16px * var(--player-font-scale, 1));
   border-radius: 6px;
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
@@ -594,7 +637,7 @@ input[type='checkbox'] {
   border-spacing: 0;
   width: 100%;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -604,12 +647,14 @@ input[type='checkbox'] {
 }
 
 .sd-table__cell {
-  padding: 14px 10px;
+  padding: calc(14px * var(--player-font-scale, 1))
+    calc(10px * var(--player-font-scale, 1));
   border-bottom: 1px solid #e2e8f0;
 }
 
 .sd-table__row-text {
-  padding: 14px 16px;
+  padding: calc(14px * var(--player-font-scale, 1))
+    calc(16px * var(--player-font-scale, 1));
   line-height: 1.5;
   max-width: 480px;
   font-weight: 500;
@@ -622,12 +667,23 @@ input[type='checkbox'] {
 }
 
 .sd-table__cell--header {
-  padding: 12px 8px;
-  font-size: 0.95rem;
+  background: #fff;
+  padding: calc(12px * var(--player-font-scale, 1))
+    calc(8px * var(--player-font-scale, 1));
+  font-size: calc(0.95rem * var(--player-font-scale, 1));
   font-weight: 600;
   white-space: normal;
   color: #2c3e50;
   text-align: center;
+}
+
+.likert-block__repeated-header .sd-table__cell--header {
+  background: #fff;
+  border-top: 2px solid #d9e2ec;
+}
+
+.likert-block__repeated-header .sd-table__cell--row-text {
+  background: #fff;
 }
 
 .sd-table__row-text {
@@ -637,7 +693,7 @@ input[type='checkbox'] {
 .sd-table__cell {
   width: auto;
   text-align: center;
-  font-size: 18px;
+  font-size: calc(18px * var(--player-font-scale, 1));
 }
 
 .sd-table__cell--row-text {
@@ -660,7 +716,7 @@ input[type='checkbox'] {
 /* Question descriptions */
 .sd-question__description,
 .sd-element__description {
-  font-size: 1rem;
+  font-size: calc(1rem * var(--player-font-scale, 1));
   color: #718096;
   margin-top: 6px;
   margin-bottom: 12px;
@@ -734,9 +790,9 @@ input[type='checkbox'] {
   width: 100% !important;
 }
 
-/* Make column headers (question titles) smaller */
+/* Keep matrix column headers visible while scrolling */
 .sd-paneldynamic__panel-wrapper .sd-question__title {
-  font-size: 0.95rem;
+  font-size: calc(0.95rem * var(--player-font-scale, 1));
   line-height: 1.3;
 }
 
@@ -760,9 +816,10 @@ button[title='Next'],
 #sv-pd-add-btn,
 .sd-paneldynamic__add-btn {
   margin-top: 8px;
-  padding: 8px 16px;
+  padding: calc(8px * var(--player-font-scale, 1))
+    calc(16px * var(--player-font-scale, 1));
   border-radius: 6px;
-  font-size: 0.9rem;
+  font-size: calc(0.9rem * var(--player-font-scale, 1));
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -838,10 +895,11 @@ button[id*='remove_button'] .sd-hidden {
 .sd-panel .sd-input {
   width: 100% !important;
   max-width: 100% !important;
-  padding: 10px 12px;
+  padding: calc(10px * var(--player-font-scale, 1))
+    calc(12px * var(--player-font-scale, 1));
   border: 1px solid #d0d0d0;
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--player-font-scale, 1));
   background-color: white;
   transition: border-color 0.2s ease;
   box-sizing: border-box !important;

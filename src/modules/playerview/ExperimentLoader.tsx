@@ -65,7 +65,7 @@ export const ExperimentLoader: FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     settings: AppSettings,
   ): void => {
-    const responseArray = rawData.values();
+    const responseArray = rawData.values().map((trial) => trial);
     setExperimentResult({
       rawData: { trials: responseArray },
       settings,

@@ -9,6 +9,7 @@ import {
   AppSettings,
   ExclusionCriterion,
   ExclusionOperator,
+  LikertBlock,
   OtherElementType,
   QuestionTypes,
 } from '@/modules/config/AppSettings';
@@ -28,6 +29,51 @@ export type Trial = {
 export type Pages = Record<string, unknown>;
 
 const FINAL_CONFIRMATION_NAME = '__final_eligibility_confirmation__';
+const REPEATED_LIKERT_HEADER_CLASS = 'likert-block__repeated-header';
+const REPEATED_LIKERT_HEADER_DATA_ATTRIBUTE = 'data-likert-repeat-header';
+const REPEATED_LIKERT_HEADER_INTERVAL = 5;
+
+const repeatLikertBlockHeaders = (): void => {
+  const tables = document.querySelectorAll('.sd-matrix__table');
+
+  tables.forEach((table) => {
+    const tableElement = table as HTMLTableElement;
+    const headerRow = tableElement.tHead?.rows[0];
+
+    tableElement
+      .querySelectorAll(
+        `tbody tr[${REPEATED_LIKERT_HEADER_DATA_ATTRIBUTE}='true']`,
+      )
+      .forEach((row) => row.remove());
+
+    const bodyRows = Array.from(tableElement.tBodies[0]?.rows ?? []);
+
+    if (!headerRow || bodyRows.length <= REPEATED_LIKERT_HEADER_INTERVAL) {
+      return;
+    }
+
+    bodyRows.forEach((row, index) => {
+      const shouldRepeatHeader =
+        (index + 1) % REPEATED_LIKERT_HEADER_INTERVAL === 0 &&
+        index + 1 < bodyRows.length;
+
+      if (!shouldRepeatHeader) {
+        return;
+      }
+
+      const repeatedHeaderRow = headerRow.cloneNode(
+        true,
+      ) as HTMLTableRowElement;
+      repeatedHeaderRow.classList.add(REPEATED_LIKERT_HEADER_CLASS);
+      repeatedHeaderRow.setAttribute(
+        REPEATED_LIKERT_HEADER_DATA_ATTRIBUTE,
+        'true',
+      );
+      repeatedHeaderRow.setAttribute('aria-hidden', 'true');
+      row.parentElement?.insertBefore(repeatedHeaderRow, row.nextSibling);
+    });
+  });
+};
 
 const getLatestResponse = (
   trials: Array<Record<string, unknown>>,
@@ -115,6 +161,31 @@ const getQuestionLabelByName = (
   });
 
   return labels;
+};
+
+const buildLikertBlockQuestions = (
+  element: LikertBlock,
+  previousResponses: Record<string, unknown>,
+): Timeline => {
+  const previousLikertResponse = previousResponses[element.name] as
+    | Record<string, string>
+    | undefined;
+
+  return [
+    {
+      type: 'matrix',
+      title: element.description,
+      columns: element.scale,
+      rows: element.questions.map((question) => ({
+        value: question,
+        text: question,
+      })),
+      isRequired: element.mandatory,
+      isAllRowRequired: element.requireAll ?? false,
+      name: element.name,
+      defaultValue: previousLikertResponse,
+    },
+  ];
 };
 
 const getFinalConfirmationPage = (settings: AppSettings): Pages | null => {
@@ -257,21 +328,9 @@ const buildTimelineFromSurvey = (
           });
           break;
         case QuestionTypes.LikertBlock:
-          pageQuestions.push({
-            type: 'matrix',
-            title: element.description,
-            columns: element.scale,
-            rows: element.questions.map((q) => ({
-              value: q,
-              text: q,
-            })),
-            isRequired: element.mandatory,
-            isAllRowRequired: element.requireAll ?? false,
-            name: element.name,
-            defaultValue:
-              (previousResponses[element.name] as Record<string, string>) ||
-              undefined,
-          });
+          pageQuestions.push(
+            ...buildLikertBlockQuestions(element, previousResponses),
+          );
           break;
 
         case QuestionTypes.TableInput:
@@ -335,9 +394,13 @@ const buildTimelineFromSurvey = (
   timeline.push({
     type: jsPsychSurvey,
     survey_function: (survey: {
+      onAfterRenderPage: { add: (arg0: () => void) => void };
       onCurrentPageChanged: { add: (arg0: () => void) => void };
       currentPageNo: number;
     }) => {
+      survey.onAfterRenderPage.add(() => {
+        window.setTimeout(() => repeatLikertBlockHeaders(), 0);
+      });
       survey.onCurrentPageChanged.add(() => {
         // window.scrollTo(0, 0);
         // Update progress bar: currentPageNo is 0-indexed, so add 1
@@ -347,6 +410,7 @@ const buildTimelineFromSurvey = (
           jsPsych.progressBar.progress = progress;
         }
         updateData(jsPsych.data.get(), settings);
+        window.setTimeout(() => repeatLikertBlockHeaders(), 0);
       });
     },
     survey_json: {
@@ -430,11 +494,99 @@ export async function run({
     input.settings.fullScreenSettings.fontSize ??
     'normal';
 
+  const addFontSizeMenu = (): void => {
+    const progressBar = document.getElementById(
+      'jspsych-progressbar-container',
+    );
+    if (!progressBar || progressBar.querySelector('.custom-dropdown')) {
+      return;
+    }
+
+    const dropdown = document.createElement('select');
+    dropdown.className = 'custom-dropdown';
+    const currentFontSize =
+      document
+        .getElementById('jspsych-display-element')
+        ?.getAttribute('data-font-size') ?? appliedFontSize;
+    dropdown.innerHTML = `
+      <option value="small" ${currentFontSize === 'small' ? 'selected' : ''}>${i18n.t('SETTINGS.FULL_SCREEN.FONT_SIZE_SMALL')}</option>
+      <option value="normal" ${currentFontSize === 'normal' ? 'selected' : ''}>${i18n.t('SETTINGS.FULL_SCREEN.FONT_SIZE_NORMAL')}</option>
+      <option value="large" ${currentFontSize === 'large' ? 'selected' : ''}>${i18n.t('SETTINGS.FULL_SCREEN.FONT_SIZE_LARGE')}</option>
+      <option value="extra-large" ${currentFontSize === 'extra-large' ? 'selected' : ''}>${i18n.t('SETTINGS.FULL_SCREEN.FONT_SIZE_EXTRA_LARGE')}</option>
+    `;
+
+    const fontSizeTitle = document.createElement('span');
+    fontSizeTitle.className = 'jspsych-progress-label';
+    fontSizeTitle.textContent = i18n.t('SETTINGS.PLAYER.FONT_SIZE_LABEL');
+
+    progressBar.appendChild(fontSizeTitle);
+    progressBar.appendChild(dropdown);
+
+    dropdown.addEventListener('change', (event) => {
+      const { target } = event;
+      const jspsychDisplayElement = document.getElementById(
+        'jspsych-display-element',
+      );
+      if (jspsychDisplayElement && target instanceof HTMLSelectElement) {
+        jspsychDisplayElement.setAttribute('data-font-size', target.value);
+      }
+    });
+  };
+
+  const addFullscreenButton = (): void => {
+    if (!input.settings.fullScreenSettings.fullScreen) {
+      return;
+    }
+
+    const progressBarContainer = document.getElementById(
+      'jspsych-progressbar-container',
+    );
+
+    if (
+      !progressBarContainer ||
+      progressBarContainer.querySelector('.jspsych-btn-progress-bar')
+    ) {
+      return;
+    }
+
+    const fullscreenButton = document.createElement('button');
+    fullscreenButton.type = 'button';
+    fullscreenButton.textContent = i18n.t('SETTINGS.PLAYER.BUTTON_FULLSCREEN');
+    fullscreenButton.className = 'jspsych-btn-progress-bar';
+
+    fullscreenButton.addEventListener('click', () => {
+      const docEl = document.documentElement as HTMLElement & {
+        mozRequestFullScreen?: () => Promise<void>;
+        webkitRequestFullscreen?: () => Promise<void>;
+        msRequestFullscreen?: () => Promise<void>;
+      };
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(() => undefined);
+      } else if (docEl.mozRequestFullScreen) {
+        docEl.mozRequestFullScreen().catch(() => undefined);
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen().catch(() => undefined);
+      } else if (docEl.msRequestFullscreen) {
+        docEl.msRequestFullscreen().catch(() => undefined);
+      }
+    });
+
+    progressBarContainer.appendChild(fullscreenButton);
+  };
+
+  const addProgressBarControls = (): void => {
+    addFontSizeMenu();
+    addFullscreenButton();
+  };
+
   // Initialize jspsych
   const jsPsych: JsPsych = initJsPsych({
     show_progress_bar: true,
     auto_update_progress_bar: false,
     display_element: 'jspsych-display-element',
+    on_trial_start: (): void => {
+      addProgressBarControls();
+    },
     on_finish: (): void => {
       updateData(jsPsych.data.get(), input.settings);
     },
@@ -445,6 +597,8 @@ export async function run({
   if (displayElement) {
     displayElement.setAttribute('data-font-size', appliedFontSize);
   }
+
+  addProgressBarControls();
 
   const jsPsychTimeline: Timeline = [];
 

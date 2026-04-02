@@ -4,6 +4,7 @@
     "git fetch": true,
     "git rev-list": true,
     "git add": true,
-    "git commit": true
+    "git commit": true,
+    "npx prettier": true
   }
 }
