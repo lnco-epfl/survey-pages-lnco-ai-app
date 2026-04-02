@@ -1,10 +1,6 @@
 import FullscreenPlugin from '@jspsych/plugin-fullscreen';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import jsPsychSurvey from '@jspsych/plugin-survey';
-// eslint-disable-next-line import/no-extraneous-dependencies
-// import '@jspsych/plugin-survey/css/survey.css';
 import { DataCollection, JsPsych, initJsPsych } from 'jspsych';
 
 import i18n from '@/config/i18n';
@@ -28,9 +24,7 @@ export type Trial = {
   type?: unknown;
 } & Record<string, unknown>;
 
-export type Pages = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} & Record<string, unknown>;
+export type Pages = Record<string, unknown>;
 
 const FINAL_CONFIRMATION_NAME = '__final_eligibility_confirmation__';
 
@@ -121,9 +115,6 @@ const getQuestionLabelByName = (
 
   return labels;
 };
-
-const getPlayerLanguage = (settings: AppSettings): 'en' | 'fr' =>
-  settings.fullScreenSettings.language ?? 'en';
 
 const getFinalConfirmationPage = (settings: AppSettings): Pages | null => {
   const { exclusionSettings } = settings;
@@ -299,7 +290,7 @@ const buildTimelineFromSurvey = (
             panelCount: element.minRows,
             minPanelCount: element.minRows,
             maxPanelCount: element.maxRows,
-            panelAddText: '+ Add Row',
+            panelAddText: `+ ${i18n.t('SETTINGS.PLAYER.BUTTON_ADD_ROW')}`,
             panelRemoveText: '×',
             confirmDelete: false,
             panelRemoveButtonLocation: 'right',
@@ -377,10 +368,8 @@ const buildTimelineFromSurvey = (
  */
 const getFullScreenTrial = (): Trial => ({
   type: FullscreenPlugin,
-  choices: [i18n.t('SETTINGS.PLAYER.BUTTON_START')],
-  message: `<div style="text-align: center; font-size: 24px;">${i18n.t(
-    'SETTINGS.PLAYER.BEGIN_EXPERIMENT',
-  )}</div>`,
+  button_label: i18n.t('SETTINGS.PLAYER.BUTTON_START'),
+  message: `<div style="text-align: center; font-size: 24px;">${i18n.t('SETTINGS.PLAYER.BEGIN_EXPERIMENT')}</div>`,
   fullscreen_mode: true,
 });
 
@@ -425,7 +414,10 @@ export async function run({
   input: { settings: AppSettings; results?: ExperimentResult };
   updateData: (data: DataCollection, settings: AppSettings) => void;
 }): Promise<JsPsych> {
-  await i18n.changeLanguage(getPlayerLanguage(input.settings));
+  const playerLanguage =
+    input.settings.fullScreenSettings.language === 'fr' ? 'fr' : 'en';
+
+  await i18n.changeLanguage(playerLanguage);
 
   // Initialize jspsych
   const jsPsych: JsPsych = initJsPsych({

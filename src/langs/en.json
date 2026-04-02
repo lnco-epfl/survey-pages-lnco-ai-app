@@ -32,6 +32,7 @@
         "BUTTON_CONTINUE": "Continue",
         "BUTTON_PREVIOUS": "Previous",
         "BUTTON_SUBMIT": "Submit",
+        "BUTTON_ADD_ROW": "Add Row",
         "THANK_YOU_TITLE": "Thank you",
         "THANK_YOU_DESCRIPTION": "Your responses were submitted successfully."
       },

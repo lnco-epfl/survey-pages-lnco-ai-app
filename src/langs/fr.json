@@ -17,6 +17,7 @@
         "BUTTON_CONTINUE": "Continuer",
         "BUTTON_PREVIOUS": "Précédent",
         "BUTTON_SUBMIT": "Soumettre",
+        "BUTTON_ADD_ROW": "Ajouter une ligne",
         "THANK_YOU_TITLE": "Merci",
         "THANK_YOU_DESCRIPTION": "Vos réponses ont été soumises avec succès."
       }

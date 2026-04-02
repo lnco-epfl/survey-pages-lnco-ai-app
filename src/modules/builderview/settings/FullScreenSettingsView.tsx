@@ -26,6 +26,7 @@ const FullScreenSettingsView: FC<FullScreenSettingsViewProps> = ({
     keyPrefix: 'SETTINGS.FULL_SCREEN',
   });
   const { fullScreen, pagePerQuestion, language } = fullScreenSettings;
+  const selectedLanguage = language ?? 'en';
   return (
     <Stack spacing={1}>
       <FormControlLabel
@@ -50,7 +51,7 @@ const FullScreenSettingsView: FC<FullScreenSettingsViewProps> = ({
         </InputLabel>
         <Select
           labelId="player-language-label"
-          value={language}
+          value={selectedLanguage}
           label={t('LANGUAGE_LABEL')}
           onChange={(e) =>
             onChange({

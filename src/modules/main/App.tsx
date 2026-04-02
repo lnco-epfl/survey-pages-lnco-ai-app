@@ -14,6 +14,10 @@ const App = (): JSX.Element => {
   const context = useLocalContext();
 
   useEffect(() => {
+    if (context.context === Context.Player) {
+      return;
+    }
+
     // handle a change of language
     const lang = context?.lang ?? DEFAULT_LANGUAGE;
     if (i18n.language !== lang) {
