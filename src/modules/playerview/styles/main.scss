@@ -667,7 +667,7 @@ input[type='checkbox'] {
 }
 
 .sd-table__cell--header {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: #fff;
   padding: calc(12px * var(--player-font-scale, 1))
     calc(8px * var(--player-font-scale, 1));
   font-size: calc(0.95rem * var(--player-font-scale, 1));
@@ -675,6 +675,15 @@ input[type='checkbox'] {
   white-space: normal;
   color: #2c3e50;
   text-align: center;
+}
+
+.likert-block__repeated-header .sd-table__cell--header {
+  background: #fff;
+  border-top: 2px solid #d9e2ec;
+}
+
+.likert-block__repeated-header .sd-table__cell--row-text {
+  background: #fff;
 }
 
 .sd-table__row-text {

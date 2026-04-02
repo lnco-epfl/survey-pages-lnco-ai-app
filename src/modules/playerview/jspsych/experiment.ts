@@ -29,53 +29,50 @@ export type Trial = {
 export type Pages = Record<string, unknown>;
 
 const FINAL_CONFIRMATION_NAME = '__final_eligibility_confirmation__';
-const LIKERT_BLOCK_CHUNK_SIZE = 5;
-const LIKERT_BLOCK_CHUNK_SUFFIX = '__part';
+const REPEATED_LIKERT_HEADER_CLASS = 'likert-block__repeated-header';
+const REPEATED_LIKERT_HEADER_DATA_ATTRIBUTE = 'data-likert-repeat-header';
+const REPEATED_LIKERT_HEADER_INTERVAL = 5;
 
-const chunkArray = <T>(items: T[], chunkSize: number): T[][] => {
-  const chunks: T[][] = [];
+const repeatLikertBlockHeaders = (): void => {
+  const tables = document.querySelectorAll('.sd-matrix__table');
 
-  for (let index = 0; index < items.length; index += chunkSize) {
-    chunks.push(items.slice(index, index + chunkSize));
-  }
+  tables.forEach((table) => {
+    const tableElement = table as HTMLTableElement;
+    const headerRow = tableElement.tHead?.rows[0];
 
-  return chunks;
-};
+    tableElement
+      .querySelectorAll(
+        `tbody tr[${REPEATED_LIKERT_HEADER_DATA_ATTRIBUTE}='true']`,
+      )
+      .forEach((row) => row.remove());
 
-const normalizeLikertBlockResponses = (
-  response: Record<string, unknown>,
-): Record<string, unknown> => {
-  const normalizedResponse = { ...response };
+    const bodyRows = Array.from(tableElement.tBodies[0]?.rows ?? []);
 
-  Object.entries(response).forEach(([key, value]) => {
-    const chunkMatch = key.match(
-      new RegExp(`^(.*)${LIKERT_BLOCK_CHUNK_SUFFIX}\\d+$`),
-    );
-    if (
-      !chunkMatch ||
-      typeof value !== 'object' ||
-      value === null ||
-      Array.isArray(value)
-    ) {
+    if (!headerRow || bodyRows.length <= REPEATED_LIKERT_HEADER_INTERVAL) {
       return;
     }
 
-    const baseName = chunkMatch[1];
-    const existingBaseResponse = normalizedResponse[baseName];
-    const mergedBaseResponse = {
-      ...(typeof existingBaseResponse === 'object' &&
-      existingBaseResponse !== null &&
-      !Array.isArray(existingBaseResponse)
-        ? (existingBaseResponse as Record<string, unknown>)
-        : {}),
-      ...(value as Record<string, unknown>),
-    };
+    bodyRows.forEach((row, index) => {
+      const shouldRepeatHeader =
+        (index + 1) % REPEATED_LIKERT_HEADER_INTERVAL === 0 &&
+        index + 1 < bodyRows.length;
 
-    normalizedResponse[baseName] = mergedBaseResponse;
-    delete normalizedResponse[key];
+      if (!shouldRepeatHeader) {
+        return;
+      }
+
+      const repeatedHeaderRow = headerRow.cloneNode(
+        true,
+      ) as HTMLTableRowElement;
+      repeatedHeaderRow.classList.add(REPEATED_LIKERT_HEADER_CLASS);
+      repeatedHeaderRow.setAttribute(
+        REPEATED_LIKERT_HEADER_DATA_ATTRIBUTE,
+        'true',
+      );
+      repeatedHeaderRow.setAttribute('aria-hidden', 'true');
+      row.parentElement?.insertBefore(repeatedHeaderRow, row.nextSibling);
+    });
   });
-
-  return normalizedResponse;
 };
 
 const getLatestResponse = (
@@ -90,9 +87,7 @@ const getLatestResponse = (
         !Array.isArray(trial.response),
     );
 
-  return normalizeLikertBlockResponses(
-    (latestResponseTrial?.response as Record<string, unknown>) || {},
-  );
+  return (latestResponseTrial?.response as Record<string, unknown>) || {};
 };
 
 const normalizeForComparison = (value: unknown): string => {
@@ -172,38 +167,25 @@ const buildLikertBlockQuestions = (
   element: LikertBlock,
   previousResponses: Record<string, unknown>,
 ): Timeline => {
-  const rowChunks = chunkArray(element.questions, LIKERT_BLOCK_CHUNK_SIZE);
+  const previousLikertResponse = previousResponses[element.name] as
+    | Record<string, string>
+    | undefined;
 
-  return rowChunks.map((rows, chunkIndex) => {
-    const chunkName = `${element.name}${LIKERT_BLOCK_CHUNK_SUFFIX}${chunkIndex + 1}`;
-    const previousLikertResponse = previousResponses[element.name] as
-      | Record<string, string>
-      | undefined;
-    const defaultValue = previousLikertResponse
-      ? rows.reduce<Record<string, string>>((acc, row) => {
-          const rowValue = previousLikertResponse[row];
-          if (rowValue !== undefined) {
-            acc[row] = rowValue;
-          }
-          return acc;
-        }, {})
-      : undefined;
-
-    return {
+  return [
+    {
       type: 'matrix',
-      title: chunkIndex === 0 ? element.description : '',
-      titleLocation: chunkIndex === 0 ? undefined : 'hidden',
+      title: element.description,
       columns: element.scale,
-      rows: rows.map((question) => ({
+      rows: element.questions.map((question) => ({
         value: question,
         text: question,
       })),
       isRequired: element.mandatory,
       isAllRowRequired: element.requireAll ?? false,
-      name: chunkName,
-      defaultValue,
-    };
-  });
+      name: element.name,
+      defaultValue: previousLikertResponse,
+    },
+  ];
 };
 
 const getFinalConfirmationPage = (settings: AppSettings): Pages | null => {
@@ -412,9 +394,13 @@ const buildTimelineFromSurvey = (
   timeline.push({
     type: jsPsychSurvey,
     survey_function: (survey: {
+      onAfterRenderPage: { add: (arg0: () => void) => void };
       onCurrentPageChanged: { add: (arg0: () => void) => void };
       currentPageNo: number;
     }) => {
+      survey.onAfterRenderPage.add(() => {
+        window.setTimeout(() => repeatLikertBlockHeaders(), 0);
+      });
       survey.onCurrentPageChanged.add(() => {
         // window.scrollTo(0, 0);
         // Update progress bar: currentPageNo is 0-indexed, so add 1
@@ -424,6 +410,7 @@ const buildTimelineFromSurvey = (
           jsPsych.progressBar.progress = progress;
         }
         updateData(jsPsych.data.get(), settings);
+        window.setTimeout(() => repeatLikertBlockHeaders(), 0);
       });
     },
     survey_json: {
