@@ -1,7 +1,14 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FormControlLabel, Switch } from '@mui/material';
+import {
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+  Switch,
+} from '@mui/material';
 import Stack from '@mui/material/Stack';
 
 import { FullScreenSettings } from '@/modules/config/AppSettings';
@@ -18,7 +25,7 @@ const FullScreenSettingsView: FC<FullScreenSettingsViewProps> = ({
   const { t } = useTranslation('translations', {
     keyPrefix: 'SETTINGS.FULL_SCREEN',
   });
-  const { fullScreen, pagePerQuestion } = fullScreenSettings;
+  const { fullScreen, pagePerQuestion, language } = fullScreenSettings;
   return (
     <Stack spacing={1}>
       <FormControlLabel
@@ -37,6 +44,25 @@ const FullScreenSettingsView: FC<FullScreenSettingsViewProps> = ({
         }
         checked={pagePerQuestion}
       />
+      <FormControl fullWidth>
+        <InputLabel id="player-language-label">
+          {t('LANGUAGE_LABEL')}
+        </InputLabel>
+        <Select
+          labelId="player-language-label"
+          value={language}
+          label={t('LANGUAGE_LABEL')}
+          onChange={(e) =>
+            onChange({
+              ...fullScreenSettings,
+              language: e.target.value as 'en' | 'fr',
+            })
+          }
+        >
+          <MenuItem value="en">{t('LANGUAGE_ENGLISH')}</MenuItem>
+          <MenuItem value="fr">{t('LANGUAGE_FRENCH')}</MenuItem>
+        </Select>
+      </FormControl>
     </Stack>
   );
 };

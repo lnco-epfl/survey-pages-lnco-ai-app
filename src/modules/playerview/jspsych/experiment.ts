@@ -7,6 +7,7 @@ import jsPsychSurvey from '@jspsych/plugin-survey';
 // import '@jspsych/plugin-survey/css/survey.css';
 import { DataCollection, JsPsych, initJsPsych } from 'jspsych';
 
+import i18n from '@/config/i18n';
 import { ExperimentResult } from '@/modules/config/AppResults';
 import {
   AppSettings,
@@ -120,6 +121,9 @@ const getQuestionLabelByName = (
 
   return labels;
 };
+
+const getPlayerLanguage = (settings: AppSettings): 'en' | 'fr' =>
+  settings.fullScreenSettings.language ?? 'en';
 
 const getFinalConfirmationPage = (settings: AppSettings): Pages | null => {
   const { exclusionSettings } = settings;
@@ -356,11 +360,9 @@ const buildTimelineFromSurvey = (
     survey_json: {
       pages: surveyPages,
       showQuestionNumbers: false,
-      completeText:
-        settings.sectionSettings.pageButtonSettings.finishSurveyText,
-      pageNextText: settings.sectionSettings.pageButtonSettings.nextPageText,
-      pagePrevText:
-        settings.sectionSettings.pageButtonSettings.previousPageText,
+      completeText: i18n.t('SETTINGS.PLAYER.BUTTON_SUBMIT'),
+      pageNextText: i18n.t('SETTINGS.PLAYER.BUTTON_CONTINUE'),
+      pagePrevText: i18n.t('SETTINGS.PLAYER.BUTTON_PREVIOUS'),
       css: {
         isPanelless: true,
       },
@@ -375,9 +377,10 @@ const buildTimelineFromSurvey = (
  */
 const getFullScreenTrial = (): Trial => ({
   type: FullscreenPlugin,
-  choices: ['Start'],
-  message:
-    '<div style="text-align: center; font-size: 24px;">Begin the Experiment</div>',
+  choices: [i18n.t('SETTINGS.PLAYER.BUTTON_START')],
+  message: `<div style="text-align: center; font-size: 24px;">${i18n.t(
+    'SETTINGS.PLAYER.BEGIN_EXPERIMENT',
+  )}</div>`,
   fullscreen_mode: true,
 });
 
@@ -404,7 +407,7 @@ const getCompletionPage = (
       return `<div class='sd-html'><h5>${settings.nextStepSettings.title}</h5><p>${settings.nextStepSettings.description}</p><a class='link-to-experiment' target="_parent" href=${settings.nextStepSettings.link}>${settings.nextStepSettings.linkText}</a></div>`;
     }
 
-    return "<div class='sd-html'><h5>Thank you</h5><p>Your responses were submitted successfully.</p></div>";
+    return `<div class='sd-html'><h5>${i18n.t('SETTINGS.PLAYER.THANK_YOU_TITLE')}</h5><p>${i18n.t('SETTINGS.PLAYER.THANK_YOU_DESCRIPTION')}</p></div>`;
   },
   on_start: (): void => {
     if (jspsych.progressBar) {
@@ -422,6 +425,8 @@ export async function run({
   input: { settings: AppSettings; results?: ExperimentResult };
   updateData: (data: DataCollection, settings: AppSettings) => void;
 }): Promise<JsPsych> {
+  await i18n.changeLanguage(getPlayerLanguage(input.settings));
+
   // Initialize jspsych
   const jsPsych: JsPsych = initJsPsych({
     show_progress_bar: true,
