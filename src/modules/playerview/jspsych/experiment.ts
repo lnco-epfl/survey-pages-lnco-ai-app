@@ -12,6 +12,7 @@ import {
   OtherElementType,
   QuestionTypes,
 } from '@/modules/config/AppSettings';
+import { ScreenCalibration } from '@/utils/screenCalibration';
 
 import '../styles/main.scss';
 
@@ -411,13 +412,23 @@ export async function run({
   input,
   updateData,
 }: {
-  input: { settings: AppSettings; results?: ExperimentResult };
+  input: {
+    settings: AppSettings;
+    results?: ExperimentResult;
+    screenCalibration?: ScreenCalibration;
+  };
   updateData: (data: DataCollection, settings: AppSettings) => void;
 }): Promise<JsPsych> {
   const playerLanguage =
     input.settings.fullScreenSettings.language === 'fr' ? 'fr' : 'en';
 
   await i18n.changeLanguage(playerLanguage);
+
+  // Determine applied font size: calibration takes precedence, then builder setting, then default
+  const appliedFontSize =
+    input.screenCalibration?.fontSize ??
+    input.settings.fullScreenSettings.fontSize ??
+    'normal';
 
   // Initialize jspsych
   const jsPsych: JsPsych = initJsPsych({
@@ -428,6 +439,12 @@ export async function run({
       updateData(jsPsych.data.get(), input.settings);
     },
   });
+
+  // Apply font size from calibration or builder setting
+  const displayElement = document.getElementById('jspsych-display-element');
+  if (displayElement) {
+    displayElement.setAttribute('data-font-size', appliedFontSize);
+  }
 
   const jsPsychTimeline: Timeline = [];
 

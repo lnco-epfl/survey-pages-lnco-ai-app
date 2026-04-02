@@ -2,7 +2,11 @@ import { FC, useEffect, useRef, useState } from 'react';
 
 import { Typography } from '@mui/material';
 
+import { useLocalContext } from '@graasp/apps-query-client';
+
 import { DataCollection, JsPsych } from 'jspsych';
+
+import { parseScreenCalibration } from '@/utils/screenCalibration';
 
 import { TrialData } from '../config/AppResults';
 import {
@@ -16,6 +20,9 @@ import { run } from './jspsych/experiment';
 
 export const ExperimentLoader: FC = () => {
   const settings = useSettings();
+  // screenCalibration may not exist in the LocalContext type yet, so cast to access it
+  const { screenCalibration } = useLocalContext() as Record<string, unknown>;
+  const parsedCalibration = parseScreenCalibration(screenCalibration);
 
   const jsPsychRef = useRef<null | Promise<JsPsych>>(null);
 
@@ -82,6 +89,7 @@ export const ExperimentLoader: FC = () => {
           input: {
             settings,
             results: experimentResultsAppData,
+            screenCalibration: parsedCalibration,
           },
           // eslint-disable-next-line @typescript-eslint/no-shadow
           updateData: (data, settings) => updateData(data, settings),
@@ -100,6 +108,7 @@ export const ExperimentLoader: FC = () => {
           input: {
             settings,
             results: experimentResultsAppData,
+            screenCalibration: parsedCalibration,
           },
           // eslint-disable-next-line @typescript-eslint/no-shadow
           updateData: (data, settings) => updateData(data, settings),
