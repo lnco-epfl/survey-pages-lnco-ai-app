@@ -414,7 +414,7 @@ h1 {
 .sd-element--with-frame {
   padding: 0px;
   box-shadow: none;
-  overflow: auto;
+  overflow: visible;
 }
 
 .jspsych-display-element input[type='text'] {
@@ -637,7 +637,7 @@ input[type='checkbox'] {
   border-spacing: 0;
   width: 100%;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -667,6 +667,7 @@ input[type='checkbox'] {
 }
 
 .sd-table__cell--header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   padding: calc(12px * var(--player-font-scale, 1))
     calc(8px * var(--player-font-scale, 1));
   font-size: calc(0.95rem * var(--player-font-scale, 1));
@@ -780,7 +781,7 @@ input[type='checkbox'] {
   width: 100% !important;
 }
 
-/* Make column headers (question titles) smaller */
+/* Keep matrix column headers visible while scrolling */
 .sd-paneldynamic__panel-wrapper .sd-question__title {
   font-size: calc(0.95rem * var(--player-font-scale, 1));
   line-height: 1.3;

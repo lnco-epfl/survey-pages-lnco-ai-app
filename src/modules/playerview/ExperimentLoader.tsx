@@ -18,6 +18,40 @@ import useExperimentResults from '../context/ExperimentContext';
 import { useSettings } from '../context/SettingsContext';
 import { run } from './jspsych/experiment';
 
+const normalizeLikertBlockResponses = (
+  response: Record<string, unknown>,
+): Record<string, unknown> => {
+  const normalizedResponse = { ...response };
+
+  Object.entries(response).forEach(([key, value]) => {
+    const chunkMatch = key.match(/^(.*)__part\d+$/);
+    if (
+      !chunkMatch ||
+      typeof value !== 'object' ||
+      value === null ||
+      Array.isArray(value)
+    ) {
+      return;
+    }
+
+    const baseName = chunkMatch[1];
+    const existingBaseResponse = normalizedResponse[baseName];
+    const mergedBaseResponse = {
+      ...(typeof existingBaseResponse === 'object' &&
+      existingBaseResponse !== null &&
+      !Array.isArray(existingBaseResponse)
+        ? (existingBaseResponse as Record<string, unknown>)
+        : {}),
+      ...(value as Record<string, unknown>),
+    };
+
+    normalizedResponse[baseName] = mergedBaseResponse;
+    delete normalizedResponse[key];
+  });
+
+  return normalizedResponse;
+};
+
 export const ExperimentLoader: FC = () => {
   const settings = useSettings();
   // screenCalibration may not exist in the LocalContext type yet, so cast to access it
@@ -65,7 +99,22 @@ export const ExperimentLoader: FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     settings: AppSettings,
   ): void => {
-    const responseArray = rawData.values();
+    const responseArray = rawData.values().map((trial) => {
+      if (
+        typeof trial.response === 'object' &&
+        trial.response !== null &&
+        !Array.isArray(trial.response)
+      ) {
+        return {
+          ...trial,
+          response: normalizeLikertBlockResponses(
+            trial.response as Record<string, unknown>,
+          ),
+        };
+      }
+
+      return trial;
+    });
     setExperimentResult({
       rawData: { trials: responseArray },
       settings,
