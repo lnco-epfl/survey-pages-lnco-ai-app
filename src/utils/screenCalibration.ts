@@ -1,35 +1,47 @@
-export type FontSize = 'small' | 'normal' | 'large' | 'extra-large';
+export type FontSizeOption = 'small' | 'normal' | 'large' | 'extra-large';
 
 export type ScreenCalibration = {
-  fontSize?: FontSize;
+  fontSize?: FontSizeOption;
+  scale?: number;
 };
 
-const validFontSizes: FontSize[] = ['small', 'normal', 'large', 'extra-large'];
+const VALID_FONT_SIZES: FontSizeOption[] = [
+  'small',
+  'normal',
+  'large',
+  'extra-large',
+];
 
-/**
- * Parse and validate screen calibration from localContext
- * Returns undefined if no valid calibration data exists
- */
+const isValidScale = (value: unknown): value is number =>
+  typeof value === 'number' && value > 0.5 && value < 3;
+
+const isValidFontSize = (value: unknown): value is FontSizeOption =>
+  typeof value === 'string' &&
+  VALID_FONT_SIZES.includes(value as FontSizeOption);
+
 export const parseScreenCalibration = (
-  calibration: unknown,
+  localContext: unknown,
 ): ScreenCalibration | undefined => {
+  const calibration = (localContext as { screenCalibration?: unknown })
+    ?.screenCalibration;
+
   if (!calibration || typeof calibration !== 'object') {
     return undefined;
   }
 
-  const { fontSize } = calibration as Record<string, unknown>;
+  const parsed: ScreenCalibration = {};
+  const { fontSize, scale } = calibration as {
+    fontSize?: unknown;
+    scale?: unknown;
+  };
 
-  // Only include fontSize if it's valid
-  if (fontSize && validFontSizes.includes(fontSize as FontSize)) {
-    return { fontSize: fontSize as FontSize };
+  if (isValidFontSize(fontSize)) {
+    parsed.fontSize = fontSize;
   }
 
-  // Return undefined if no valid fields
-  if (!fontSize) {
-    return undefined;
+  if (isValidScale(scale)) {
+    parsed.scale = scale;
   }
 
-  // If fontSize was present but invalid, still return empty calibration
-  // (allows graceful fallback without treating as error)
-  return undefined;
+  return parsed.fontSize || parsed.scale ? parsed : undefined;
 };

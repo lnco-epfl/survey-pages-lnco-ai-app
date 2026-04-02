@@ -12,9 +12,9 @@
   "dependencies": {
     "@emotion/react": "11.13.3",
     "@emotion/styled": "11.13.0",
-    "@graasp/apps-query-client": "3.4.15",
-    "@graasp/sdk": "4.9.0",
-    "@graasp/ui": "4.17.1",
+    "@graasp/apps-query-client": "github:lnco-epfl/lnco-ai-apps-query-client",
+    "@graasp/sdk": "github:lnco-epfl/graasp-sdk",
+    "@graasp/ui": "github:lnco-epfl/graasp-ui",
     "@jspsych/plugin-fullscreen": "^2.0.0",
     "@jspsych/plugin-html-button-response": "^2.0.0",
     "@jspsych/plugin-html-keyboard-response": "^2.0.0",

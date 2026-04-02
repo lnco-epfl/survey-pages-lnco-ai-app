@@ -17,7 +17,14 @@ const ErrorBoundary: FC<{ children?: ReactNode }> = ({ children }) => {
           error={error}
           componentStack={componentStack}
           eventId={eventId}
-          captureUserFeedback={Sentry.captureUserFeedback}
+          captureFeedback={({ message, name, email, associatedEventId }) =>
+            Sentry.captureUserFeedback({
+              event_id: associatedEventId || eventId,
+              comments: message,
+              name: name || '',
+              email: email || '',
+            })
+          }
           title={tFallback('MESSAGE_TITLE')}
           formTitle={tFallback('MESSAGE_FEEDBACK')}
           nameLabel={tFallback('NAME_LABEL')}
