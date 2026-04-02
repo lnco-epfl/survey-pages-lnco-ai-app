@@ -52,6 +52,75 @@ h1 {
   outline: none;
 }
 
+/* Font size calibration scaling */
+.jspsych-display-element[data-font-size='small'] {
+  font-size: 1rem;
+
+  h1 {
+    font-size: 33px;
+  }
+
+  h2 {
+    font-size: 30px;
+  }
+
+  h3 {
+    font-size: 1rem;
+    line-height: 1.2rem;
+  }
+}
+
+.jspsych-display-element[data-font-size='normal'] {
+  font-size: 1.5rem;
+
+  h1 {
+    font-size: 50px;
+  }
+
+  h2 {
+    font-size: 45px;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+  }
+}
+
+.jspsych-display-element[data-font-size='large'] {
+  font-size: 2rem;
+
+  h1 {
+    font-size: 67px;
+  }
+
+  h2 {
+    font-size: 60px;
+  }
+
+  h3 {
+    font-size: 2rem;
+    line-height: 2.4rem;
+  }
+}
+
+.jspsych-display-element[data-font-size='extra-large'] {
+  font-size: 2.5rem;
+
+  h1 {
+    font-size: 83px;
+  }
+
+  h2 {
+    font-size: 75px;
+  }
+
+  h3 {
+    font-size: 2.5rem;
+    line-height: 3rem;
+  }
+}
+
 /* Wrapper for outer jsPsych content */
 .jspsych-content-wrapper,
 .jspsych-content-outer-wrapper {

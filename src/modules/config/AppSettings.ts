@@ -133,6 +133,7 @@ export type FullScreenSettings = {
   fullScreen: boolean;
   pagePerQuestion: boolean;
   language: 'en' | 'fr';
+  fontSize?: 'small' | 'normal' | 'large' | 'extra-large';
 };
 
 export type NextStepSettings = {
