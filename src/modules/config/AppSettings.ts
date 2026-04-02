@@ -87,10 +87,10 @@ export type LikertBlock = {
 };
 
 export type TableColumn = {
-  name: string; // internal ID
-  label: string; // display label
+  name: string;
+  label: string;
   inputType: 'text' | 'number' | 'date';
-  required: boolean; // is this column required per row
+  required: boolean;
 };
 
 export type TableInput = {
@@ -132,6 +132,7 @@ export type PageButtonSettings = {
 export type FullScreenSettings = {
   fullScreen: boolean;
   pagePerQuestion: boolean;
+  language: 'en' | 'fr';
 };
 
 export type NextStepSettings = {

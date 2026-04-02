@@ -1,5 +1,26 @@
 {
   "translations": {
-    "Welcome to the Graasp App Starter Kit": "Bienvenue dans le kit de démarrage de l'application Graasp"
+    "Welcome to the Graasp App Starter Kit": "Bienvenue dans le kit de démarrage de l'application Graasp",
+    "SETTINGS": {
+      "TITLE": "Paramètres",
+      "FULL_SCREEN": {
+        "TITLE": "Paramètres généraux",
+        "LABEL_FULL_SCREEN": "Afficher en plein écran",
+        "LABEL_PAGE_PER_QUESTION": "Afficher chaque question sur une nouvelle page",
+        "LANGUAGE_LABEL": "Langue du lecteur",
+        "LANGUAGE_ENGLISH": "English",
+        "LANGUAGE_FRENCH": "Français"
+      },
+      "PLAYER": {
+        "BEGIN_EXPERIMENT": "Commencer l'expérience",
+        "BUTTON_START": "Commencer",
+        "BUTTON_CONTINUE": "Continuer",
+        "BUTTON_PREVIOUS": "Précédent",
+        "BUTTON_SUBMIT": "Soumettre",
+        "BUTTON_ADD_ROW": "Ajouter une ligne",
+        "THANK_YOU_TITLE": "Merci",
+        "THANK_YOU_DESCRIPTION": "Vos réponses ont été soumises avec succès."
+      }
+    }
   }
 }

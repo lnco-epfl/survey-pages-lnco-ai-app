@@ -20,7 +20,6 @@ import {
   MultiAnswer,
   MultipleChoice,
   OtherElementType,
-  PageButtonSettings,
   QuestionTypes,
   SectionSettings,
   ShortAnswer,
@@ -30,7 +29,6 @@ import {
   TextElement,
 } from '@/modules/config/AppSettings';
 
-import PageButtonSettingsView from './PageButtonSettingsView';
 import LikertScaleSettingsView from './questionviews/LickertScaleSettingsView';
 import LikertBlockSettingsView from './questionviews/LikertBlockSettingsView';
 import LongAnswerSettingsView from './questionviews/LongAnswerSettingsView';
@@ -654,12 +652,6 @@ const SectionSettingsView: FC<SectionSettingsViewProps> = ({
 
   return (
     <Stack spacing={2}>
-      <PageButtonSettingsView
-        onChange={(newPageButtonSettings: PageButtonSettings) =>
-          onChange({ sections, pageButtonSettings: newPageButtonSettings })
-        }
-        pageButtonSettings={pageButtonSettings}
-      />
       {getSectionsDisplay()}
       <Button variant="contained" onClick={() => onChange(handleAddNewPage())}>
         {t('ADD_PAGE')}

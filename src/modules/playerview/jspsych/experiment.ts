@@ -1,12 +1,9 @@
 import FullscreenPlugin from '@jspsych/plugin-fullscreen';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import jsPsychSurvey from '@jspsych/plugin-survey';
-// eslint-disable-next-line import/no-extraneous-dependencies
-// import '@jspsych/plugin-survey/css/survey.css';
 import { DataCollection, JsPsych, initJsPsych } from 'jspsych';
 
+import i18n from '@/config/i18n';
 import { ExperimentResult } from '@/modules/config/AppResults';
 import {
   AppSettings,
@@ -27,9 +24,7 @@ export type Trial = {
   type?: unknown;
 } & Record<string, unknown>;
 
-export type Pages = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} & Record<string, unknown>;
+export type Pages = Record<string, unknown>;
 
 const FINAL_CONFIRMATION_NAME = '__final_eligibility_confirmation__';
 
@@ -295,7 +290,7 @@ const buildTimelineFromSurvey = (
             panelCount: element.minRows,
             minPanelCount: element.minRows,
             maxPanelCount: element.maxRows,
-            panelAddText: '+ Add Row',
+            panelAddText: `+ ${i18n.t('SETTINGS.PLAYER.BUTTON_ADD_ROW')}`,
             panelRemoveText: '×',
             confirmDelete: false,
             panelRemoveButtonLocation: 'right',
@@ -356,11 +351,9 @@ const buildTimelineFromSurvey = (
     survey_json: {
       pages: surveyPages,
       showQuestionNumbers: false,
-      completeText:
-        settings.sectionSettings.pageButtonSettings.finishSurveyText,
-      pageNextText: settings.sectionSettings.pageButtonSettings.nextPageText,
-      pagePrevText:
-        settings.sectionSettings.pageButtonSettings.previousPageText,
+      completeText: i18n.t('SETTINGS.PLAYER.BUTTON_SUBMIT'),
+      pageNextText: i18n.t('SETTINGS.PLAYER.BUTTON_CONTINUE'),
+      pagePrevText: i18n.t('SETTINGS.PLAYER.BUTTON_PREVIOUS'),
       css: {
         isPanelless: true,
       },
@@ -375,9 +368,8 @@ const buildTimelineFromSurvey = (
  */
 const getFullScreenTrial = (): Trial => ({
   type: FullscreenPlugin,
-  choices: ['Start'],
-  message:
-    '<div style="text-align: center; font-size: 24px;">Begin the Experiment</div>',
+  button_label: i18n.t('SETTINGS.PLAYER.BUTTON_START'),
+  message: `<div style="text-align: center; font-size: 24px;">${i18n.t('SETTINGS.PLAYER.BEGIN_EXPERIMENT')}</div>`,
   fullscreen_mode: true,
 });
 
@@ -404,7 +396,7 @@ const getCompletionPage = (
       return `<div class='sd-html'><h5>${settings.nextStepSettings.title}</h5><p>${settings.nextStepSettings.description}</p><a class='link-to-experiment' target="_parent" href=${settings.nextStepSettings.link}>${settings.nextStepSettings.linkText}</a></div>`;
     }
 
-    return "<div class='sd-html'><h5>Thank you</h5><p>Your responses were submitted successfully.</p></div>";
+    return `<div class='sd-html'><h5>${i18n.t('SETTINGS.PLAYER.THANK_YOU_TITLE')}</h5><p>${i18n.t('SETTINGS.PLAYER.THANK_YOU_DESCRIPTION')}</p></div>`;
   },
   on_start: (): void => {
     if (jspsych.progressBar) {
@@ -422,6 +414,11 @@ export async function run({
   input: { settings: AppSettings; results?: ExperimentResult };
   updateData: (data: DataCollection, settings: AppSettings) => void;
 }): Promise<JsPsych> {
+  const playerLanguage =
+    input.settings.fullScreenSettings.language === 'fr' ? 'fr' : 'en';
+
+  await i18n.changeLanguage(playerLanguage);
+
   // Initialize jspsych
   const jsPsych: JsPsych = initJsPsych({
     show_progress_bar: true,

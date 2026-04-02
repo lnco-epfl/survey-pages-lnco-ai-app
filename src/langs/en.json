@@ -21,7 +21,20 @@
       "FULL_SCREEN": {
         "TITLE": "General Settings",
         "LABEL_FULL_SCREEN": "Display Full Screen",
-        "LABEL_PAGE_PER_QUESTION": "Display each question on a new page"
+        "LABEL_PAGE_PER_QUESTION": "Display each question on a new page",
+        "LANGUAGE_LABEL": "Player language",
+        "LANGUAGE_ENGLISH": "English",
+        "LANGUAGE_FRENCH": "Français"
+      },
+      "PLAYER": {
+        "BEGIN_EXPERIMENT": "Begin the Experiment",
+        "BUTTON_START": "Start",
+        "BUTTON_CONTINUE": "Continue",
+        "BUTTON_PREVIOUS": "Previous",
+        "BUTTON_SUBMIT": "Submit",
+        "BUTTON_ADD_ROW": "Add Row",
+        "THANK_YOU_TITLE": "Thank you",
+        "THANK_YOU_DESCRIPTION": "Your responses were submitted successfully."
       },
       "NEXT_STEP": {
         "TITLE_LABEL": "Title",
