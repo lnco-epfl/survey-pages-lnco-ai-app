@@ -430,11 +430,99 @@ export async function run({
     input.settings.fullScreenSettings.fontSize ??
     'normal';
 
+  const addFontSizeMenu = (): void => {
+    const progressBar = document.getElementById(
+      'jspsych-progressbar-container',
+    );
+    if (!progressBar || progressBar.querySelector('.custom-dropdown')) {
+      return;
+    }
+
+    const dropdown = document.createElement('select');
+    dropdown.className = 'custom-dropdown';
+    const currentFontSize =
+      document
+        .getElementById('jspsych-display-element')
+        ?.getAttribute('data-font-size') ?? appliedFontSize;
+    dropdown.innerHTML = `
+      <option value="small" ${currentFontSize === 'small' ? 'selected' : ''}>${i18n.t('SETTINGS.FULL_SCREEN.FONT_SIZE_SMALL')}</option>
+      <option value="normal" ${currentFontSize === 'normal' ? 'selected' : ''}>${i18n.t('SETTINGS.FULL_SCREEN.FONT_SIZE_NORMAL')}</option>
+      <option value="large" ${currentFontSize === 'large' ? 'selected' : ''}>${i18n.t('SETTINGS.FULL_SCREEN.FONT_SIZE_LARGE')}</option>
+      <option value="extra-large" ${currentFontSize === 'extra-large' ? 'selected' : ''}>${i18n.t('SETTINGS.FULL_SCREEN.FONT_SIZE_EXTRA_LARGE')}</option>
+    `;
+
+    const fontSizeTitle = document.createElement('span');
+    fontSizeTitle.className = 'jspsych-progress-label';
+    fontSizeTitle.textContent = i18n.t('SETTINGS.PLAYER.FONT_SIZE_LABEL');
+
+    progressBar.appendChild(fontSizeTitle);
+    progressBar.appendChild(dropdown);
+
+    dropdown.addEventListener('change', (event) => {
+      const { target } = event;
+      const jspsychDisplayElement = document.getElementById(
+        'jspsych-display-element',
+      );
+      if (jspsychDisplayElement && target instanceof HTMLSelectElement) {
+        jspsychDisplayElement.setAttribute('data-font-size', target.value);
+      }
+    });
+  };
+
+  const addFullscreenButton = (): void => {
+    if (!input.settings.fullScreenSettings.fullScreen) {
+      return;
+    }
+
+    const progressBarContainer = document.getElementById(
+      'jspsych-progressbar-container',
+    );
+
+    if (
+      !progressBarContainer ||
+      progressBarContainer.querySelector('.jspsych-btn-progress-bar')
+    ) {
+      return;
+    }
+
+    const fullscreenButton = document.createElement('button');
+    fullscreenButton.type = 'button';
+    fullscreenButton.textContent = i18n.t('SETTINGS.PLAYER.BUTTON_FULLSCREEN');
+    fullscreenButton.className = 'jspsych-btn-progress-bar';
+
+    fullscreenButton.addEventListener('click', () => {
+      const docEl = document.documentElement as HTMLElement & {
+        mozRequestFullScreen?: () => Promise<void>;
+        webkitRequestFullscreen?: () => Promise<void>;
+        msRequestFullscreen?: () => Promise<void>;
+      };
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(() => undefined);
+      } else if (docEl.mozRequestFullScreen) {
+        docEl.mozRequestFullScreen().catch(() => undefined);
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen().catch(() => undefined);
+      } else if (docEl.msRequestFullscreen) {
+        docEl.msRequestFullscreen().catch(() => undefined);
+      }
+    });
+
+    progressBarContainer.appendChild(fullscreenButton);
+  };
+
+  const addProgressBarControls = (): void => {
+    addFontSizeMenu();
+    addFullscreenButton();
+  };
+
   // Initialize jspsych
   const jsPsych: JsPsych = initJsPsych({
     show_progress_bar: true,
     auto_update_progress_bar: false,
     display_element: 'jspsych-display-element',
+    on_trial_start: (): void => {
+      addProgressBarControls();
+    },
     on_finish: (): void => {
       updateData(jsPsych.data.get(), input.settings);
     },
@@ -445,6 +533,8 @@ export async function run({
   if (displayElement) {
     displayElement.setAttribute('data-font-size', appliedFontSize);
   }
+
+  addProgressBarControls();
 
   const jsPsychTimeline: Timeline = [];
 
