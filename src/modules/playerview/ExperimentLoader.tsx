@@ -21,8 +21,8 @@ import { run } from './jspsych/experiment';
 export const ExperimentLoader: FC = () => {
   const settings = useSettings();
   // screenCalibration may not exist in the LocalContext type yet, so cast to access it
-  const { screenCalibration } = useLocalContext() as Record<string, unknown>;
-  const parsedCalibration = parseScreenCalibration(screenCalibration);
+  const localContext = useLocalContext();
+  const parsedCalibration = parseScreenCalibration(localContext);
 
   const jsPsychRef = useRef<null | Promise<JsPsych>>(null);
 

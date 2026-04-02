@@ -494,6 +494,9 @@ export async function run({
     input.settings.fullScreenSettings.fontSize ??
     'normal';
 
+  console.log('Applied font size:', appliedFontSize);
+  console.log('screenCalibration:', input.screenCalibration);
+
   const addFontSizeMenu = (): void => {
     const progressBar = document.getElementById(
       'jspsych-progressbar-container',

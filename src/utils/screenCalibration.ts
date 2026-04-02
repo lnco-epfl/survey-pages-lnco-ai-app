@@ -22,8 +22,10 @@ const isValidFontSize = (value: unknown): value is FontSizeOption =>
 export const parseScreenCalibration = (
   localContext: unknown,
 ): ScreenCalibration | undefined => {
+  console.log('Parsing screenCalibration from localContext:', localContext);
   const calibration = (localContext as { screenCalibration?: unknown })
     ?.screenCalibration;
+  console.log('Raw screenCalibration from localContext:', calibration);
 
   if (!calibration || typeof calibration !== 'object') {
     return undefined;
