@@ -26,7 +26,8 @@
         "FONT_SIZE_LABEL": "Taille de police :",
         "BUTTON_FULLSCREEN": "Plein écran",
         "THANK_YOU_TITLE": "Merci",
-        "THANK_YOU_DESCRIPTION": "Vos réponses ont été soumises avec succès."
+        "THANK_YOU_DESCRIPTION": "Vos réponses ont été soumises avec succès.",
+        "PROGRESS_BAR_MESSAGE": "Progression :"
       }
     }
   }
