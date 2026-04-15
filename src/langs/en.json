@@ -41,7 +41,8 @@
         "FONT_SIZE_LABEL": "Font Size:",
         "BUTTON_FULLSCREEN": "Fullscreen",
         "THANK_YOU_TITLE": "Thank you",
-        "THANK_YOU_DESCRIPTION": "Your responses were submitted successfully."
+        "THANK_YOU_DESCRIPTION": "Your responses were submitted successfully.",
+        "PROGRESS_BAR_MESSAGE": "Progress:"
       },
       "NEXT_STEP": {
         "TITLE_LABEL": "Title",

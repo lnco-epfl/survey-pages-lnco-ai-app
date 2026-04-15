@@ -584,6 +584,7 @@ export async function run({
     show_progress_bar: true,
     auto_update_progress_bar: false,
     display_element: 'jspsych-display-element',
+    message_progress_bar: i18n.t('SETTINGS.PLAYER.PROGRESS_BAR_MESSAGE'),
     on_trial_start: (): void => {
       addProgressBarControls();
     },
