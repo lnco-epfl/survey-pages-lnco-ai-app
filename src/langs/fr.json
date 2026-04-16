@@ -17,7 +17,7 @@
         "FONT_SIZE_EXTRA_LARGE": "Très grande"
       },
       "PLAYER": {
-        "BEGIN_EXPERIMENT": "Commencer l'expérience",
+        "BEGIN_EXPERIMENT": "Cliquez sur le bouton ci-dessous pour passer en plein écran et commencer.",
         "BUTTON_START": "Commencer",
         "BUTTON_CONTINUE": "Continuer",
         "BUTTON_PREVIOUS": "Précédent",
@@ -27,7 +27,8 @@
         "BUTTON_FULLSCREEN": "Plein écran",
         "THANK_YOU_TITLE": "Merci",
         "THANK_YOU_DESCRIPTION": "Vos réponses ont été soumises avec succès.",
-        "PROGRESS_BAR_MESSAGE": "Progression :"
+        "PROGRESS_BAR_MESSAGE": "Progression :",
+        "PLACEHOLDER": "Votre réponse"
       }
     }
   }
