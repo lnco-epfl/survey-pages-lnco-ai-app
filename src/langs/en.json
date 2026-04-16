@@ -42,7 +42,8 @@
         "BUTTON_FULLSCREEN": "Fullscreen",
         "THANK_YOU_TITLE": "Thank you",
         "THANK_YOU_DESCRIPTION": "Your responses were submitted successfully.",
-        "PROGRESS_BAR_MESSAGE": "Progress:"
+        "PROGRESS_BAR_MESSAGE": "Progress:",
+        "PLACEHOLDER": "Your answer"
       },
       "NEXT_STEP": {
         "TITLE_LABEL": "Title",

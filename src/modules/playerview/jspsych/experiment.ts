@@ -265,7 +265,7 @@ const buildTimelineFromSurvey = (
             rows: 1,
             isRequired: element.mandatory,
             inputType: element.answerType,
-            placeholder: 'Your Answer',
+            placeholder: i18n.t('SETTINGS.PLAYER.PLACEHOLDER'),
             name: element.name,
             defaultValue:
               (previousResponses[element.name] as string) || undefined,
