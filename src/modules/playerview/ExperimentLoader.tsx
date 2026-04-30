@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Typography } from '@mui/material';
 
@@ -72,6 +72,45 @@ export const ExperimentLoader: FC = () => {
     });
   };
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollUp, setCanScrollUp] = useState(false);
+  const [canScrollDown, setCanScrollDown] = useState(false);
+
+  const updateScrollState = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    setCanScrollUp(scrollTop > 8);
+    setCanScrollDown(scrollTop + clientHeight < scrollHeight - 8);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    const ro = new ResizeObserver(updateScrollState);
+    const mo = new MutationObserver(updateScrollState);
+    if (el) {
+      el.addEventListener('scroll', updateScrollState, { passive: true });
+      ro.observe(el);
+      mo.observe(el, { childList: true, subtree: true });
+      updateScrollState();
+    }
+    return () => {
+      el?.removeEventListener('scroll', updateScrollState);
+      ro.disconnect();
+      mo.disconnect();
+    };
+  }, [updateScrollState]);
+
+  const scrollPage = (direction: 'up' | 'down'): void => {
+    scrollRef.current?.scrollBy({
+      top:
+        direction === 'down'
+          ? window.innerHeight * 0.6
+          : -window.innerHeight * 0.6,
+      behavior: 'smooth',
+    });
+  };
+
   const [completedContent, setCompletedContent] = useState<JSX.Element | null>(
     null,
   );
@@ -121,5 +160,29 @@ export const ExperimentLoader: FC = () => {
   if (completedContent) {
     return completedContent;
   }
-  return <div id="jspsych-display-element" />;
+  return (
+    <>
+      <div id="jspsych-display-element" ref={scrollRef} />
+      {canScrollDown && (
+        <button
+          type="button"
+          className="scroll-hint scroll-hint--down"
+          onClick={() => scrollPage('down')}
+          aria-label="Scroll down"
+        >
+          ↓ Scroll down
+        </button>
+      )}
+      {canScrollUp && (
+        <button
+          type="button"
+          className="scroll-hint scroll-hint--up"
+          onClick={() => scrollPage('up')}
+          aria-label="Scroll up"
+        >
+          ↑ Scroll up
+        </button>
+      )}
+    </>
+  );
 };

@@ -62,7 +62,7 @@ const ResultsView: FC = () => {
           onClick={() => {
             downloadJson(
               allData(),
-              `numerosity_all_${format(new Date(), 'yyyyMMdd_HH.mm')}.json`,
+              `survey_${format(new Date(), 'yyyyMMdd_HH.mm')}.json`,
             );
           }}
         >

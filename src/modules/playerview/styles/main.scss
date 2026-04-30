@@ -912,6 +912,45 @@ button[id*='remove_button'] .sd-hidden {
   box-shadow: 0 0 0 3px rgba(102, 102, 102, 0.1);
 }
 
+/* Scroll hint buttons — shown when survey page overflows the viewport */
+.scroll-hint {
+  position: fixed;
+  right: 32px;
+  z-index: 1000;
+  padding: 16px 28px;
+  background: rgba(44, 62, 80, 0.9);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Nunito', 'Roboto', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+  user-select: none;
+
+  &:hover {
+    background: rgba(44, 62, 80, 1);
+    transform: scale(1.06);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &--down {
+    bottom: 32px;
+  }
+
+  &--up {
+    top: 90px;
+  }
+}
+
 /* Show native checkbox */
 .sd-item__control {
   position: static;
