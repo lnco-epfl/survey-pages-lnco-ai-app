@@ -2,6 +2,8 @@ import FullscreenPlugin from '@jspsych/plugin-fullscreen';
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import jsPsychSurvey from '@jspsych/plugin-survey';
 import { DataCollection, JsPsych, initJsPsych } from 'jspsych';
+// eslint-disable-next-line import/no-unassigned-import, import/no-extraneous-dependencies
+import 'survey-core/i18n/french';
 
 import i18n from '@/config/i18n';
 import { ExperimentResult } from '@/modules/config/AppResults';
