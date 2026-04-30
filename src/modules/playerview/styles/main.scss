@@ -642,6 +642,7 @@ input[type='checkbox'] {
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
+  table-layout: fixed;
   border-radius: 8px;
   overflow: visible;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -656,20 +657,25 @@ input[type='checkbox'] {
   padding: calc(14px * var(--player-font-scale, 1))
     calc(10px * var(--player-font-scale, 1));
   border-bottom: 1px solid #e2e8f0;
+  text-align: center;
+  font-size: calc(18px * var(--player-font-scale, 1));
 }
 
-.sd-table__row-text {
+/* Question text column — first cell in every row locked at 50% */
+.sd-table th:first-child,
+.sd-table td:first-child {
+  width: 50%;
+  text-align: left;
   padding: calc(14px * var(--player-font-scale, 1))
     calc(16px * var(--player-font-scale, 1));
   line-height: 1.5;
-  max-width: 480px;
   font-weight: 500;
   color: #2c3e50;
 }
 
+/* Answer columns — equally share remaining 50% (enforced by table-layout: fixed) */
 .sd-table__cell--choice {
   text-align: center;
-  min-width: 70px;
 }
 
 .sd-table__cell--header {
@@ -690,20 +696,6 @@ input[type='checkbox'] {
 
 .likert-block__repeated-header .sd-table__cell--row-text {
   background: #fff;
-}
-
-.sd-table__row-text {
-  width: 45%;
-}
-
-.sd-table__cell {
-  width: auto;
-  text-align: center;
-  font-size: calc(18px * var(--player-font-scale, 1));
-}
-
-.sd-table__cell--row-text {
-  text-align: left;
 }
 
 .sd-item__control {
