@@ -1,4 +1,5 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Typography } from '@mui/material';
 
@@ -19,6 +20,7 @@ import { useSettings } from '../context/SettingsContext';
 import { run } from './jspsych/experiment';
 
 export const ExperimentLoader: FC = () => {
+  const { t } = useTranslation();
   const settings = useSettings();
   // screenCalibration may not exist in the LocalContext type yet, so cast to access it
   const localContext = useLocalContext();
@@ -168,9 +170,9 @@ export const ExperimentLoader: FC = () => {
           type="button"
           className="scroll-hint scroll-hint--down"
           onClick={() => scrollPage('down')}
-          aria-label="Scroll down"
+          aria-label={t('SETTINGS.PLAYER.SCROLL_DOWN')}
         >
-          ↓ Scroll down
+          {t('SETTINGS.PLAYER.SCROLL_DOWN')}
         </button>
       )}
       {canScrollUp && (
@@ -178,9 +180,9 @@ export const ExperimentLoader: FC = () => {
           type="button"
           className="scroll-hint scroll-hint--up"
           onClick={() => scrollPage('up')}
-          aria-label="Scroll up"
+          aria-label={t('SETTINGS.PLAYER.SCROLL_UP')}
         >
-          ↑ Scroll up
+          {t('SETTINGS.PLAYER.SCROLL_UP')}
         </button>
       )}
     </>

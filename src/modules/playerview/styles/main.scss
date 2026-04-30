@@ -2,15 +2,11 @@
 //@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 .player-view {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-}
-
-@media (display-mode: fullscreen) {
-  .player-view {
-    height: 100vh;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  }
 }
 
 h3 {
@@ -39,6 +35,7 @@ h1 {
   display: flex;
   margin: auto;
   flex: 1 1 100%;
+  min-height: 0;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   color: #2c3e50;
   width: 100%;
@@ -129,20 +126,23 @@ h1 {
 /* Wrapper for outer jsPsych content */
 .jspsych-content-wrapper,
 .jspsych-content-outer-wrapper {
-  height: 100%;
+  height: auto;
 }
 
 /* inner JsPsych content (no progress bar) */
 .jspsych-content {
-  margin: 0 auto; /* this is for overflowing content */
+  margin: 0 auto;
   width: 75%;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
 }
 
-/* Progress bar Div */
+/* Progress bar Div — sticky so it stays visible while the survey scrolls */
 .jspsych-top {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   align-items: flex-start;
 }
 
@@ -295,6 +295,10 @@ h1 {
   font-size: calc(1.7rem * var(--player-font-scale, 1));
   line-height: 1.8rem;
   color: #313131;
+}
+
+.sd-root-modern__wrapper {
+  width: 100%;
 }
 
 /* Outer box around every question */
@@ -574,31 +578,33 @@ input[type='checkbox'] {
 .sd-element__erbox {
   color: #ffffff;
   background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  font-size: calc(1rem * var(--player-font-scale, 1));
+  font-size: calc(1.15rem * var(--player-font-scale, 1));
   margin-bottom: 12px;
-  padding: calc(12px * var(--player-font-scale, 1))
-    calc(16px * var(--player-font-scale, 1));
+  padding: calc(14px * var(--player-font-scale, 1))
+    calc(18px * var(--player-font-scale, 1));
   border-radius: 6px;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .sd-element__erbox::before {
   content: '⚠';
-  font-size: 1.2em;
+  font-size: 1.4em;
   flex-shrink: 0;
 }
 
 /* Highlight questions with errors */
-.sd-question--error .sd-element--with-frame {
-  border: 2px solid #e74c3c;
+.sd-question--error .sd-element--with-frame.sd-question--title-top {
+  outline: 4px solid #e74c3c;
+  outline-offset: 2px;
+  background-color: #fffbfb;
   box-shadow:
-    0 0 0 3px rgba(231, 76, 60, 0.1),
+    0 0 0 6px rgba(231, 76, 60, 0.12),
     0 2px 8px rgba(0, 0, 0, 0.08);
-  animation: shake 0.4s ease-in-out;
+  animation: shake 0.45s ease-in-out;
 }
 
 @keyframes shake {
@@ -606,11 +612,11 @@ input[type='checkbox'] {
   100% {
     transform: translateX(0);
   }
-  25% {
-    transform: translateX(-5px);
+  20% {
+    transform: translateX(-7px);
   }
-  75% {
-    transform: translateX(5px);
+  60% {
+    transform: translateX(7px);
   }
 }
 
@@ -810,6 +816,15 @@ button[title='Previous'],
 button[title='Next'],
 .sd-paneldynamic__buttons-container .sv-action:not(#sv-pd-add-btn) {
   display: none !important;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 
 /* Add button styling - make sure it's visible */

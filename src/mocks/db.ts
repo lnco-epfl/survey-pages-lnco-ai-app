@@ -38,7 +38,7 @@ export const defaultMockContext: LocalContext = {
   permission: PermissionLevel.Admin,
   context: 'builder',
   itemId: mockItem.id,
-  memberId: mockMembers[0].id,
+  accountId: mockMembers[0].id,
 };
 
 const buildDatabase = (members?: CompleteMember[]): Database => ({

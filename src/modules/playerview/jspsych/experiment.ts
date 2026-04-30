@@ -174,7 +174,7 @@ const buildLikertBlockQuestions = (
   return [
     {
       type: 'matrix',
-      title: element.description,
+      title: element.description || '\u00A0',
       columns: element.scale,
       rows: element.questions.map((question) => ({
         value: question,
@@ -396,10 +396,20 @@ const buildTimelineFromSurvey = (
     survey_function: (survey: {
       onAfterRenderPage: { add: (arg0: () => void) => void };
       onCurrentPageChanged: { add: (arg0: () => void) => void };
+      onCurrentPageChanging: { add: (arg0: () => void) => void };
       currentPageNo: number;
     }) => {
       survey.onAfterRenderPage.add(() => {
         window.setTimeout(() => repeatLikertBlockHeaders(), 0);
+      });
+      survey.onCurrentPageChanging.add(() => {
+        window.setTimeout(() => {
+          const container = document.getElementById('jspsych-display-element');
+          const firstError = container?.querySelector('.sd-question--error');
+          if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 50);
       });
       survey.onCurrentPageChanged.add(() => {
         // window.scrollTo(0, 0);
@@ -416,6 +426,7 @@ const buildTimelineFromSurvey = (
     survey_json: {
       pages: surveyPages,
       showQuestionNumbers: false,
+      locale: settings.fullScreenSettings.language === 'fr' ? 'fr' : 'en',
       completeText: i18n.t('SETTINGS.PLAYER.BUTTON_SUBMIT'),
       pageNextText: i18n.t('SETTINGS.PLAYER.BUTTON_CONTINUE'),
       pagePrevText: i18n.t('SETTINGS.PLAYER.BUTTON_PREVIOUS'),
