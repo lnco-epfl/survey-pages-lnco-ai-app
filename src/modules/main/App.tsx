@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import { useLocalContext } from '@graasp/apps-query-client';
-import { Context } from '@graasp/sdk';
+import { useLocalContext } from '@lnco-ai/apps-query-client';
+import { Context } from '@lnco-ai/sdk';
 
 import i18n, { DEFAULT_LANGUAGE } from '../../config/i18n';
 import { ExperimentResultsProvider } from '../context/ExperimentContext';

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pwsh -Command 'cd '\\\\''c:/Users/mijsters/Documents/LNCOai/apps/survey-pages-lnco-ai-app/survey-pages-lnco-ai-app'\\\\''; Get-ChildItem -Recurse -Include '\\\\''*.ts'\\\\'','\\\\''*.tsx'\\\\'' | Where-Object { $_.FullName -notmatch '\\\\''node_modules'\\\\'' } | ForEach-Object { $content = Get-Content $_.FullName -Raw; $updated = $content -replace '\\\\''@graasp/apps-query-client'\\\\'','\\\\''@lnco-ai/apps-query-client'\\\\'' -replace '\\\\''@graasp/sdk'\\\\'','\\\\''@lnco-ai/sdk'\\\\'' -replace '\\\\''@graasp/ui'\\\\'','\\\\''@lnco-ai/ui'\\\\''; if \\($updated -ne $content\\) { Set-Content $_.FullName $updated -NoNewline; Write-Host $_.FullName } }')",
+      "Bash(powershell -Command 'cd '\\\\''c:/Users/mijsters/Documents/LNCOai/apps/survey-pages-lnco-ai-app/survey-pages-lnco-ai-app'\\\\''; Get-ChildItem -Recurse -Include '\\\\''*.ts'\\\\'','\\\\''*.tsx'\\\\'' | Where-Object { $_.FullName -notmatch '\\\\''node_modules'\\\\'' } | ForEach-Object { $content = Get-Content $_.FullName -Raw; $updated = $content -replace '\\\\''@graasp/apps-query-client'\\\\'','\\\\''@lnco-ai/apps-query-client'\\\\'' -replace '\\\\''@graasp/sdk'\\\\'','\\\\''@lnco-ai/sdk'\\\\'' -replace '\\\\''@graasp/ui'\\\\'','\\\\''@lnco-ai/ui'\\\\''; if \\($updated -ne $content\\) { Set-Content $_.FullName $updated -NoNewline; Write-Host $_.FullName } }')"
+    ]
+  }
+}

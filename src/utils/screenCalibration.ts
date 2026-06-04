@@ -3,6 +3,8 @@ export type FontSizeOption = 'small' | 'normal' | 'large' | 'extra-large';
 export type ScreenCalibration = {
   fontSize?: FontSizeOption;
   scale?: number;
+  participantId?: string;
+  participantCode?: string;
 };
 
 const VALID_FONT_SIZES: FontSizeOption[] = [
@@ -30,9 +32,11 @@ export const parseScreenCalibration = (
   }
 
   const parsed: ScreenCalibration = {};
-  const { fontSize, scale } = calibration as {
+  const { fontSize, scale, participantId, participantCode } = calibration as {
     fontSize?: unknown;
     scale?: unknown;
+    participantId?: unknown;
+    participantCode?: unknown;
   };
 
   if (isValidFontSize(fontSize)) {
@@ -43,5 +47,18 @@ export const parseScreenCalibration = (
     parsed.scale = scale;
   }
 
-  return parsed.fontSize || parsed.scale ? parsed : undefined;
+  if (typeof participantId === 'string' && participantId.length > 0) {
+    parsed.participantId = participantId;
+  }
+
+  if (typeof participantCode === 'string' && participantCode.length > 0) {
+    parsed.participantCode = participantCode;
+  }
+
+  return parsed.fontSize ||
+    parsed.scale ||
+    parsed.participantId ||
+    parsed.participantCode
+    ? parsed
+    : undefined;
 };

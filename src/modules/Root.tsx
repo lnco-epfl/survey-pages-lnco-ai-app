@@ -11,7 +11,7 @@ import {
   GraaspContextDevTool,
   WithLocalContext,
   WithTokenContext,
-} from '@graasp/apps-query-client';
+} from '@lnco-ai/apps-query-client';
 
 import i18nConfig from '@/config/i18n';
 import {
