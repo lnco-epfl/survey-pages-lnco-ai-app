@@ -606,6 +606,16 @@ export async function run({
     },
   });
 
+  // Stamp participant identity onto every trial so it appears in exported data
+  const participantId = input.screenCalibration?.participantId;
+  const participantCode = input.screenCalibration?.participantCode;
+  if (participantId !== undefined || participantCode !== undefined) {
+    jsPsych.data.addProperties({
+      ...(participantId !== undefined && { participantId }),
+      ...(participantCode !== undefined && { participantCode }),
+    });
+  }
+
   // Apply font size from calibration or builder setting
   const displayElement = document.getElementById('jspsych-display-element');
   if (displayElement) {

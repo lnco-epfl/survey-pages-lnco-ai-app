@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Typography } from '@mui/material';
 
-import { useLocalContext } from '@graasp/apps-query-client';
-
+import { useLocalContext } from '@lnco-ai/apps-query-client';
 import { DataCollection, JsPsych } from 'jspsych';
 
 import { parseScreenCalibration } from '@/utils/screenCalibration';
