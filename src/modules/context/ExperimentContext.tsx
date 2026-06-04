@@ -89,7 +89,7 @@ export const ExperimentResultsProvider: FC<{
     () =>
       (experimentResults: ExperimentResult): void => {
         const payloadData = experimentResults;
-        if (isSuccess) {
+        if (isSuccess && accountId) {
           if (hasPosted.current) {
             if (experimentResultsAppData?.id) {
               // Eventually useless
@@ -105,7 +105,7 @@ export const ExperimentResultsProvider: FC<{
           }
         }
       },
-    [isSuccess, patchAppData, postAppData, experimentResultsAppData],
+    [accountId, isSuccess, patchAppData, postAppData, experimentResultsAppData],
   );
 
   const deleteExperimentResult = useMemo(

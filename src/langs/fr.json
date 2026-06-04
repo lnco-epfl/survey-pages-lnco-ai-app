@@ -28,7 +28,9 @@
         "THANK_YOU_TITLE": "Merci",
         "THANK_YOU_DESCRIPTION": "Vos réponses ont été soumises avec succès.",
         "PROGRESS_BAR_MESSAGE": "Progression :",
-        "PLACEHOLDER": "Votre réponse"
+        "PLACEHOLDER": "Votre réponse",
+        "SCROLL_DOWN": "↓ Défiler vers le bas",
+        "SCROLL_UP": "↑ Défiler vers le haut"
       }
     }
   }
