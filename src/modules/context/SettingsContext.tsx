@@ -23,6 +23,7 @@ const defaultSettingsValues: AllSettingsType = {
     pagePerQuestion: true,
     language: 'en',
     fontSize: 'normal',
+    contentWidth: 'default',
   },
   nextStepSettings: {
     linkToNextPage: false,

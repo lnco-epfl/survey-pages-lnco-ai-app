@@ -25,10 +25,11 @@ const FullScreenSettingsView: FC<FullScreenSettingsViewProps> = ({
   const { t } = useTranslation('translations', {
     keyPrefix: 'SETTINGS.FULL_SCREEN',
   });
-  const { fullScreen, pagePerQuestion, language, fontSize } =
+  const { fullScreen, pagePerQuestion, language, fontSize, contentWidth } =
     fullScreenSettings;
   const selectedLanguage = language ?? 'en';
   const selectedFontSize = fontSize ?? 'normal';
+  const selectedContentWidth = contentWidth ?? 'default';
   return (
     <Stack spacing={1}>
       <FormControlLabel
@@ -89,6 +90,26 @@ const FullScreenSettingsView: FC<FullScreenSettingsViewProps> = ({
           <MenuItem value="normal">{t('FONT_SIZE_NORMAL')}</MenuItem>
           <MenuItem value="large">{t('FONT_SIZE_LARGE')}</MenuItem>
           <MenuItem value="extra-large">{t('FONT_SIZE_EXTRA_LARGE')}</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl fullWidth>
+        <InputLabel id="player-content-width-label">
+          {t('CONTENT_WIDTH_LABEL')}
+        </InputLabel>
+        <Select
+          labelId="player-content-width-label"
+          value={selectedContentWidth}
+          label={t('CONTENT_WIDTH_LABEL')}
+          onChange={(e) =>
+            onChange({
+              ...fullScreenSettings,
+              contentWidth: e.target.value as 'default' | 'wide' | 'full',
+            })
+          }
+        >
+          <MenuItem value="default">{t('CONTENT_WIDTH_DEFAULT')}</MenuItem>
+          <MenuItem value="wide">{t('CONTENT_WIDTH_WIDE')}</MenuItem>
+          <MenuItem value="full">{t('CONTENT_WIDTH_FULL')}</MenuItem>
         </Select>
       </FormControl>
     </Stack>

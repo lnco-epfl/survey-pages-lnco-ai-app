@@ -14,7 +14,11 @@
         "FONT_SIZE_SMALL": "Petite",
         "FONT_SIZE_NORMAL": "Normale",
         "FONT_SIZE_LARGE": "Grande",
-        "FONT_SIZE_EXTRA_LARGE": "Très grande"
+        "FONT_SIZE_EXTRA_LARGE": "Très grande",
+        "CONTENT_WIDTH_LABEL": "Largeur de la page",
+        "CONTENT_WIDTH_DEFAULT": "Par défaut",
+        "CONTENT_WIDTH_WIDE": "Large",
+        "CONTENT_WIDTH_FULL": "Pleine largeur"
       },
       "PLAYER": {
         "BEGIN_EXPERIMENT": "Cliquez sur le bouton ci-dessous pour passer en plein écran et commencer.",

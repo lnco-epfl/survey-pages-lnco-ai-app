@@ -29,7 +29,11 @@
         "FONT_SIZE_SMALL": "Small",
         "FONT_SIZE_NORMAL": "Normal",
         "FONT_SIZE_LARGE": "Large",
-        "FONT_SIZE_EXTRA_LARGE": "Extra Large"
+        "FONT_SIZE_EXTRA_LARGE": "Extra Large",
+        "CONTENT_WIDTH_LABEL": "Page width",
+        "CONTENT_WIDTH_DEFAULT": "Default",
+        "CONTENT_WIDTH_WIDE": "Wide",
+        "CONTENT_WIDTH_FULL": "Full width"
       },
       "PLAYER": {
         "BEGIN_EXPERIMENT": "Begin the Experiment",
@@ -96,6 +100,9 @@
         "NUMBER_TYPE_LABEL": "Number",
         "DATE_TYPE_LABEL": "Date",
         "ADD_SCALE_OPTION": "Add Scale Option",
+        "LIKERT_ROW_TEXT_WIDTH_LABEL": "Question column width",
+        "LIKERT_HEADER_FONT_SCALE_LABEL": "Column title size",
+        "LIKERT_AUTO": "Auto (fit to columns)",
         "SCALE_OPTION_LABEL": "Scale Options",
         "DESCRIPTION_LABEL": "Description",
         "TITLE_LABEL": "Title",

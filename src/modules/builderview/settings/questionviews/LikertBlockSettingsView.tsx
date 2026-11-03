@@ -5,14 +5,34 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
   Button,
+  FormControl,
   FormControlLabel,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Switch,
   TextField,
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 
+import { omit } from 'lodash';
+
 import { LikertBlock } from '@/modules/config/AppSettings';
+
+const AUTO = 'auto';
+const ROW_TEXT_WIDTH_OPTIONS = [20, 30, 40, 50, 60, 70];
+const HEADER_FONT_SCALE_OPTIONS = [0.6, 0.7, 0.8, 0.9, 1, 1.15, 1.3];
+
+// Removes the key for "Auto" so saved settings stay equal to unset ones
+const setLayoutOption = (
+  questionObject: LikertBlock,
+  key: 'rowTextWidth' | 'headerFontScale',
+  value: number | string,
+): LikertBlock => {
+  const rest = omit(questionObject, key);
+  return value === AUTO ? rest : { ...rest, [key]: Number(value) };
+};
 
 type LikertBlockSettingsViewProps = {
   questionObject: LikertBlock;
@@ -135,6 +155,56 @@ const LikertBlockSettingsView: FC<LikertBlockSettingsViewProps> = ({
         }
         checked={questionObject.requireAll ?? false}
       />
+      <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+        <FormControl fullWidth>
+          <InputLabel id={`${questionObject.name}-row-text-width-label`}>
+            {t('LIKERT_ROW_TEXT_WIDTH_LABEL')}
+          </InputLabel>
+          <Select
+            labelId={`${questionObject.name}-row-text-width-label`}
+            value={questionObject.rowTextWidth ?? AUTO}
+            label={t('LIKERT_ROW_TEXT_WIDTH_LABEL')}
+            onChange={(e) =>
+              onChange(
+                setLayoutOption(questionObject, 'rowTextWidth', e.target.value),
+              )
+            }
+          >
+            <MenuItem value={AUTO}>{t('LIKERT_AUTO')}</MenuItem>
+            {ROW_TEXT_WIDTH_OPTIONS.map((width) => (
+              <MenuItem key={width} value={width}>
+                {width}%
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id={`${questionObject.name}-header-font-scale-label`}>
+            {t('LIKERT_HEADER_FONT_SCALE_LABEL')}
+          </InputLabel>
+          <Select
+            labelId={`${questionObject.name}-header-font-scale-label`}
+            value={questionObject.headerFontScale ?? AUTO}
+            label={t('LIKERT_HEADER_FONT_SCALE_LABEL')}
+            onChange={(e) =>
+              onChange(
+                setLayoutOption(
+                  questionObject,
+                  'headerFontScale',
+                  e.target.value,
+                ),
+              )
+            }
+          >
+            <MenuItem value={AUTO}>{t('LIKERT_AUTO')}</MenuItem>
+            {HEADER_FONT_SCALE_OPTIONS.map((fontScale) => (
+              <MenuItem key={fontScale} value={fontScale}>
+                {Math.round(fontScale * 100)}%
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
       <Box sx={{ mt: 2 }}>
         <Box sx={{ mb: 1 }}>
           <strong>Questions (Rows):</strong>

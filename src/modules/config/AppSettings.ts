@@ -84,6 +84,8 @@ export type LikertBlock = {
   requireAll?: boolean; // Require all questions to be answered
   questions: string[]; // rows
   scale: string[];
+  rowTextWidth?: number; // % of table width for the question column; auto-fit when unset
+  headerFontScale?: number; // multiplier for column title size; auto-fit when unset
 };
 
 export type TableColumn = {
@@ -134,6 +136,7 @@ export type FullScreenSettings = {
   pagePerQuestion: boolean;
   language: 'en' | 'fr';
   fontSize?: 'small' | 'normal' | 'large' | 'extra-large';
+  contentWidth?: 'default' | 'wide' | 'full';
 };
 
 export type NextStepSettings = {

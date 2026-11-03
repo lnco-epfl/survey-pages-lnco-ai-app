@@ -77,6 +77,106 @@ const repeatLikertBlockHeaders = (): void => {
   });
 };
 
+const LIKERT_FITTING_CLASS = 'likert-block--fitting';
+const LIKERT_DEFAULT_ROW_TEXT_WIDTH = 50;
+const LIKERT_MIN_ROW_TEXT_WIDTH = 20;
+const LIKERT_ROW_TEXT_WIDTH_STEP = 5;
+const LIKERT_MIN_HEADER_SCALE = 0.6;
+const LIKERT_HEADER_SCALE_STEP = 0.05;
+const LIKERT_MIN_COLUMN_CHARACTERS = 12;
+
+// Width in px of `characters` average characters, measured in the cell's own font
+const measureCharacterWidth = (
+  cell: HTMLTableCellElement,
+  characters: number,
+): number => {
+  const probe = document.createElement('span');
+  probe.style.cssText = `display:inline-block;width:${characters}ch;visibility:hidden;`;
+  (cell.querySelector('span') ?? cell).appendChild(probe);
+  const width = probe.offsetWidth;
+  probe.remove();
+  return width;
+};
+
+const getContentWidth = (cell: HTMLTableCellElement): number => {
+  const style = window.getComputedStyle(cell);
+  return (
+    cell.clientWidth -
+    parseFloat(style.paddingLeft) -
+    parseFloat(style.paddingRight)
+  );
+};
+
+/**
+ * Prevents Likert column titles from overlapping. A single word wider than its
+ * column cannot wrap, so first the question column is narrowed until every
+ * answer column fits its longest word and at least 12 characters, then the
+ * title font is shrunk. Values set manually in the builder (data attributes on
+ * the table) are kept as-is.
+ */
+const fitLikertBlockColumns = (): void => {
+  const tables =
+    document.querySelectorAll<HTMLTableElement>('.sd-matrix__table');
+
+  tables.forEach((table) => {
+    const headerCells = Array.from(table.tHead?.rows[0]?.cells ?? []).slice(1);
+    if (headerCells.length === 0) {
+      return;
+    }
+
+    const manualWidth = table.dataset.likertRowTextWidth
+      ? Number(table.dataset.likertRowTextWidth)
+      : undefined;
+    const manualScale = table.dataset.likertHeaderScale
+      ? Number(table.dataset.likertHeaderScale)
+      : undefined;
+
+    let width = manualWidth ?? LIKERT_DEFAULT_ROW_TEXT_WIDTH;
+    let scale = manualScale ?? 1;
+    const apply = (): void => {
+      table.style.setProperty('--likert-row-text-width', `${width}%`);
+      table.style.setProperty('--likert-header-scale', `${scale}`);
+    };
+    const overflows = (): boolean =>
+      headerCells.some((cell) => cell.scrollWidth > cell.clientWidth + 1);
+
+    // Disable the mid-word break fallback while measuring
+    table.classList.add(LIKERT_FITTING_CLASS);
+    apply();
+
+    const minColumnWidth = measureCharacterWidth(
+      headerCells[0],
+      LIKERT_MIN_COLUMN_CHARACTERS,
+    );
+    const tooNarrow = (): boolean =>
+      overflows() ||
+      headerCells.some((cell) => getContentWidth(cell) < minColumnWidth);
+
+    while (
+      manualWidth === undefined &&
+      width > LIKERT_MIN_ROW_TEXT_WIDTH &&
+      tooNarrow()
+    ) {
+      width -= LIKERT_ROW_TEXT_WIDTH_STEP;
+      apply();
+    }
+
+    while (
+      manualScale === undefined &&
+      scale > LIKERT_MIN_HEADER_SCALE &&
+      overflows()
+    ) {
+      scale = Math.max(
+        LIKERT_MIN_HEADER_SCALE,
+        scale - LIKERT_HEADER_SCALE_STEP,
+      );
+      apply();
+    }
+
+    table.classList.remove(LIKERT_FITTING_CLASS);
+  });
+};
+
 const getLatestResponse = (
   trials: Array<Record<string, unknown>>,
 ): Record<string, unknown> => {
@@ -386,6 +486,13 @@ const buildTimelineFromSurvey = (
     elements: questions,
   }));
 
+  const likertBlocks = new Map<string, LikertBlock>();
+  settings.sectionSettings.sections.flat().forEach((element) => {
+    if (element.type === QuestionTypes.LikertBlock) {
+      likertBlocks.set(element.name, element);
+    }
+  });
+
   const totalPages = pages.length;
   const finalConfirmationPage = getFinalConfirmationPage(settings);
   const surveyPages =
@@ -397,12 +504,37 @@ const buildTimelineFromSurvey = (
     type: jsPsychSurvey,
     survey_function: (survey: {
       onAfterRenderPage: { add: (arg0: () => void) => void };
+      onAfterRenderQuestion: {
+        add: (
+          arg0: (
+            sender: unknown,
+            options: { question: { name: string }; htmlElement: HTMLElement },
+          ) => void,
+        ) => void;
+      };
       onCurrentPageChanged: { add: (arg0: () => void) => void };
       onCurrentPageChanging: { add: (arg0: () => void) => void };
       currentPageNo: number;
     }) => {
+      survey.onAfterRenderQuestion.add((_, { question, htmlElement }) => {
+        const likertBlock = likertBlocks.get(question.name);
+        const table =
+          htmlElement.querySelector<HTMLTableElement>('.sd-matrix__table');
+        if (!likertBlock || !table) {
+          return;
+        }
+        if (likertBlock.rowTextWidth !== undefined) {
+          table.dataset.likertRowTextWidth = `${likertBlock.rowTextWidth}`;
+        }
+        if (likertBlock.headerFontScale !== undefined) {
+          table.dataset.likertHeaderScale = `${likertBlock.headerFontScale}`;
+        }
+      });
       survey.onAfterRenderPage.add(() => {
-        window.setTimeout(() => repeatLikertBlockHeaders(), 0);
+        window.setTimeout(() => {
+          repeatLikertBlockHeaders();
+          fitLikertBlockColumns();
+        }, 0);
       });
       survey.onCurrentPageChanging.add(() => {
         window.setTimeout(() => {
@@ -422,7 +554,10 @@ const buildTimelineFromSurvey = (
           jsPsych.progressBar.progress = progress;
         }
         updateData(jsPsych.data.get(), settings);
-        window.setTimeout(() => repeatLikertBlockHeaders(), 0);
+        window.setTimeout(() => {
+          repeatLikertBlockHeaders();
+          fitLikertBlockColumns();
+        }, 0);
       });
     },
     survey_json: {
@@ -542,6 +677,7 @@ export async function run({
       );
       if (jspsychDisplayElement && target instanceof HTMLSelectElement) {
         jspsychDisplayElement.setAttribute('data-font-size', target.value);
+        fitLikertBlockColumns();
       }
     });
   };
@@ -620,7 +756,15 @@ export async function run({
   const displayElement = document.getElementById('jspsych-display-element');
   if (displayElement) {
     displayElement.setAttribute('data-font-size', appliedFontSize);
+    displayElement.setAttribute(
+      'data-content-width',
+      input.settings.fullScreenSettings.contentWidth ?? 'default',
+    );
   }
+
+  window.addEventListener('resize', () =>
+    window.requestAnimationFrame(fitLikertBlockColumns),
+  );
 
   addProgressBarControls();
 
